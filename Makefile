@@ -10,7 +10,7 @@ DRY_EP  ?= dryrun_clip_120s
 AUDIO   ?=
 EPISODE ?=
 
-.PHONY: aggregate help setup setup-gpu train-gender fixture tts-fixture dry-run run eval app lint format test test-gpu clean
+.PHONY: ablation aggregate calibrate-c2 help setup setup-gpu train-gender fixture tts-fixture dry-run run eval app lint format test test-gpu clean
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-10s %s\n", $$1, $$2}'
@@ -42,6 +42,12 @@ run:  ## Pipeline real: make run EPISODE=id [UNTIL=align] [AUDIO=ruta] (busca da
 
 aggregate:  ## Métricas por corpus/cadena/año con IC bootstrap → data/processed/
 	$(PY) scripts/aggregate.py --config $(CONFIG)
+
+calibrate-c2:  ## Calibra τ de C2 contra el gold set
+	$(PY) scripts/calibrate_c2.py --config $(CONFIG)
+
+ablation:  ## C3/C4: LLM vs solo-léxico contra el gold set
+	$(PY) scripts/ablation_llm.py --config $(CONFIG)
 
 eval:  ## Evalúa eventos contra data/annotations/
 	$(PY) scripts/evaluate.py --config $(CONFIG)

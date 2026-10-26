@@ -17,6 +17,11 @@ def _num(x: float | None, nd: int = 2) -> str:
     return "—" if x is None else f"{x:.{nd}f}"
 
 
+def fmt3(x: float | None) -> str:
+    """Número con 3 decimales o un guion de ancho fijo (tablas P/R/F1)."""
+    return "  —  " if x is None else f"{x:.3f}"
+
+
 def fmt_ratio(r: RatioStat) -> str:
     """'1.84 [IC 95 %: 1.20–2.61] (n=37 eventos, 12 episodios)' o 'insuficiente (n=4 ...)'."""
     n = f"n={r.n_events} eventos, {r.n_episodes} episodio{'s' if r.n_episodes != 1 else ''}"

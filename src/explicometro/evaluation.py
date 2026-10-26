@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 import unicodedata
 from collections import defaultdict
+from collections.abc import Callable
 
 import numpy as np
 from pydantic import BaseModel
@@ -149,3 +150,40 @@ def wer(ref: str, hyp: str) -> float:
             cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (rt != ht))
         prev = cur
     return prev[-1] / max(1, len(r))
+
+
+# ------------------------------------------------------------------------ calibración
+
+
+def sweep_threshold(
+    episodes: list[tuple[Callable[[float], list[Event]], list[Event]]],
+    taus: list[float],
+    etype: EventType,
+    tol_s: float = 1.0,
+) -> list[dict[str, float | int | None]]:
+    """Para cada τ: predice con ``predict(τ)`` en cada episodio y puntúa contra el gold de
+    ``etype`` (micro, sumando episodios). Devuelve la curva P/R/F1."""
+    curve = []
+    for tau in taus:
+        tot = PRF()
+        for predict, gold in episodes:
+            s = score_events(predict(tau), [g for g in gold if g.type == etype], tol_s).get(etype, PRF())
+            tot = PRF(tp=tot.tp + s.tp, fp=tot.fp + s.fp, fn=tot.fn + s.fn)
+        curve.append(
+            {
+                "tau": round(tau, 4),
+                "tp": tot.tp,
+                "fp": tot.fp,
+                "fn": tot.fn,
+                "precision": tot.precision,
+                "recall": tot.recall,
+                "f1": tot.f1,
+            }
+        )
+    return curve
+
+
+def best_threshold(curve: list[dict]) -> dict | None:
+    """Máximo F1; en empate, el τ más alto (más conservador)."""
+    scored = [c for c in curve if c["f1"] is not None]
+    return max(scored, key=lambda c: (c["f1"], c["tau"])) if scored else None
