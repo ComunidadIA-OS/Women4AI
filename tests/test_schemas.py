@@ -64,4 +64,4 @@ def test_empty_metrics_roundtrip():
     m = EpisodeMetrics(episode_id="ep1")
     back = EpisodeMetrics.model_validate_json(m.model_dump_json())
     assert back == m
-    assert back.events == {} and back.asymmetry_ratio is None
+    assert back.events == {} and back.asymmetry_ratio.status == "sin_datos"

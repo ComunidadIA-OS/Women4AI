@@ -14,11 +14,11 @@ Convenciones:
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Annotated, Self
+from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-SCHEMA_VERSION = "0.2.0"
+SCHEMA_VERSION = "0.3.0"
 
 SpeakerId = Annotated[str, Field(pattern=r"^SPK_\d{2,}$")]
 EpisodeId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_.-]+$", min_length=1)]
@@ -108,12 +108,17 @@ class Word(_Interval):
 
 
 class Turn(_Interval):
-    """Intervención continua de un hablante."""
+    """Intervención continua de un hablante (segmentos unidos si el hueco es < 0,3 s).
+
+    ``is_backchannel``: asentimiento (< 1 s o texto del léxico). No cuenta como tener la
+    palabra: se excluye de C1 y de los turnos del bloque B.
+    """
 
     id: int = Field(ge=0)
     speaker: SpeakerId
     text: str = ""
     n_words: int = Field(default=0, ge=0)
+    is_backchannel: bool = False
 
 
 class Speaker(_Base):
@@ -131,6 +136,9 @@ class Speaker(_Base):
     total_s: Seconds = 0.0
     clean_s: Seconds | None = Field(default=None, description="Voz sin solapes usada para clasificar")
     public_name: str | None = None
+    role: Literal["moderator", "guest"] | None = Field(
+        default=None, description="Solo desde metadata; si es None, el moderador se detecta"
+    )
 
     @model_validator(mode="after")
     def _check_gender(self) -> Self:
@@ -149,6 +157,11 @@ class Event(_Base):
     t_end: Seconds
     evidence: str = Field(default="", description="Cita textual o descripción verificable")
     score: Prob | None = Field(default=None, description="Confianza/similitud en [0, 1]")
+    overlap_s: Seconds | None = Field(default=None, description="C1: solape entre B y A")
+    recovered: bool | None = Field(default=None, description="C1: A recupera el turno")
+    by_moderator: bool = Field(
+        default=False, description="Emitido por el moderador: se reporta aparte, no en C1–C4"
+    )
 
     @model_validator(mode="after")
     def _check(self) -> Self:
@@ -160,6 +173,8 @@ class Event(_Base):
 
 
 # --------------------------------------------------------------------------- métricas
+
+RatioStatus = Literal["ok", "insuficiente", "sin_datos"]
 
 
 class GenderShare(_Base):
@@ -175,15 +190,29 @@ class Presence(_Base):
 
 
 class Protagonism(_Base):
-    """Bloque B."""
+    """Bloque B de un episodio. Turnos sin backchannels (que se cuentan aparte)."""
 
     n_turns: dict[Gender, int] = Field(default_factory=dict)
     mean_turn_s: dict[Gender, Seconds] = Field(default_factory=dict)
+    n_backchannels: dict[Gender, int] = Field(default_factory=dict)
     opener: SpeakerId | None = None
     opener_gender: Gender | None = None
     closer: SpeakerId | None = None
     closer_gender: Gender | None = None
     moderator: SpeakerId | None = None
+    moderator_gender: Gender | None = None
+    moderator_source: Literal["metadata", "heuristic"] | None = None
+
+
+class ProtagonismAgg(_Base):
+    """Bloque B agregado: turnos sumados y recuentos de quién abre/cierra/modera."""
+
+    n_turns: dict[Gender, int] = Field(default_factory=dict)
+    mean_turn_s: dict[Gender, Seconds] = Field(default_factory=dict)
+    n_backchannels: dict[Gender, int] = Field(default_factory=dict)
+    openers: dict[Gender, int] = Field(default_factory=dict)
+    closers: dict[Gender, int] = Field(default_factory=dict)
+    moderators: dict[Gender, int] = Field(default_factory=dict)
 
 
 class UnknownShare(_Base):
@@ -196,13 +225,30 @@ class UnknownShare(_Base):
 
 
 class DyadStats(_Base):
+    """Tasa de una conducta en una díada, con su tamaño muestral."""
+
     count: int = Field(default=0, ge=0)
-    rate_per_min: float | None = Field(
-        default=None, ge=0, description="Eventos por minuto de habla del receptor"
-    )
+    receptor_min: float = Field(default=0.0, ge=0, description="Minutos de habla del género receptor")
+    rate_per_min: float | None = Field(default=None, ge=0, description="count / receptor_min")
+
+
+class RatioStat(_Base):
+    """Ratio con tamaño muestral. Con < ``min_events`` eventos: ``insuficiente`` y sin número."""
+
+    value: float | None = Field(default=None, ge=0)
+    ci_low: float | None = None
+    ci_high: float | None = None
+    n_events: int = Field(default=0, ge=0)
+    n_episodes: int = Field(default=0, ge=0)
+    status: RatioStatus = "sin_datos"
+
+
+EventTable = dict[EventType, dict[Dyad, DyadStats]]
 
 
 class EpisodeMetrics(_Base):
+    """Métricas de un episodio + estadísticos suficientes para agregarlo con otros."""
+
     schema_version: str = SCHEMA_VERSION
     episode_id: EpisodeId
     dry_run: bool = False
@@ -210,13 +256,35 @@ class EpisodeMetrics(_Base):
     duration_s: Seconds = 0.0
     speech_s: Seconds = 0.0
     n_speakers: int = Field(default=0, ge=0)
+    speakers_by_gender: dict[Gender, int] = Field(default_factory=dict)
+    speech_by_gender: dict[Gender, Seconds] = Field(default_factory=dict)
+    words_by_gender: dict[Gender, int] = Field(default_factory=dict)
     presence: Presence = Field(default_factory=Presence)
     unknown: UnknownShare = Field(default_factory=UnknownShare)
     protagonism: Protagonism = Field(default_factory=Protagonism)
-    events: dict[EventType, dict[Dyad, DyadStats]] = Field(default_factory=dict)
-    interruption_excess: float | None = Field(
-        default=None, ge=0, description="% interrupciones recibidas por M / % tiempo de M"
-    )
-    asymmetry_ratio: float | None = Field(
-        default=None, ge=0, description="Tasa C1 H->M / tasa C1 H->H (punto; IC en agregación)"
-    )
+    events: EventTable = Field(default_factory=dict, description="Sin eventos del moderador")
+    moderator_events: EventTable = Field(default_factory=dict, description="Moderador → invitados")
+    interruption_excess: RatioStat = Field(default_factory=RatioStat)
+    asymmetry_ratio: RatioStat = Field(default_factory=RatioStat)
+
+
+class GroupMetrics(_Base):
+    """Métricas agregadas de un grupo de episodios (corpus, cadena, año...)."""
+
+    schema_version: str = SCHEMA_VERSION
+    group_by: list[str] = Field(default_factory=list)
+    group: dict[str, str] = Field(default_factory=dict)
+    episodes: list[EpisodeId] = Field(default_factory=list)
+    n_episodes: int = Field(default=0, ge=0)
+    duration_s: Seconds = 0.0
+    speakers_by_gender: dict[Gender, int] = Field(default_factory=dict)
+    speech_by_gender: dict[Gender, Seconds] = Field(default_factory=dict)
+    words_by_gender: dict[Gender, int] = Field(default_factory=dict)
+    presence: Presence = Field(default_factory=Presence)
+    unknown: UnknownShare = Field(default_factory=UnknownShare)
+    protagonism: ProtagonismAgg = Field(default_factory=ProtagonismAgg)
+    events: EventTable = Field(default_factory=dict)
+    moderator_events: EventTable = Field(default_factory=dict)
+    interruption_excess: RatioStat = Field(default_factory=RatioStat)
+    asymmetry_ratio: RatioStat = Field(default_factory=RatioStat)
+    bootstrap: dict[str, int | float] = Field(default_factory=dict)

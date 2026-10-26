@@ -60,7 +60,7 @@ class StagesCfg(_Cfg):
     asr: StageCfg = StageCfg(backend="faster_whisper")
     align: StageCfg = StageCfg(backend="overlap")
     gender: StageCfg = StageCfg(backend="ecapa_logreg")
-    turns: StageCfg = StageCfg(backend="words", params={"max_gap_s": 0.75})
+    turns: StageCfg = StageCfg(backend="segments")
     llm: StageCfg = StageCfg(backend="openai_compatible")
     events: StageCfg = StageCfg(backend="mrbert")
     metrics: StageCfg = StageCfg(backend="default")
@@ -68,12 +68,32 @@ class StagesCfg(_Cfg):
 
 
 class InterruptionCfg(_Cfg):
-    """C1 — definición cerrada en CLAUDE.md."""
+    """C1 — definición cerrada en CLAUDE.md. Los asentimientos los marca ``turns``."""
 
     min_overlap_s: float = 0.5
     yield_within_s: float = 2.0
-    backchannel_max_s: float = 1.0
-    backchannel_lexicon: list[str] = Field(default_factory=list)
+    recover_within_s: float = Field(
+        default=5.0, ge=0, description="A recupera si su siguiente turno llega <= esto tras el fin de B"
+    )
+
+
+class ModeratorCfg(_Cfg):
+    """Heurística de moderador (la metadata ``rol`` tiene prioridad)."""
+
+    handover_max_s: float = Field(default=15.0, gt=0, description="Turno 'corto' que cede la palabra")
+    handover_gap_s: float = Field(default=2.0, ge=0, description="Otro hablante entra <= esto después")
+    edge_turns: int = Field(default=3, ge=1, description="Turnos de apertura y de cierre a mirar")
+    min_handovers: int = Field(default=3, ge=1)
+    min_margin: float = Field(
+        default=1.5, ge=1.0, description="El 1º debe ceder >= este factor × lo que cede el 2º (y más que él)"
+    )
+
+
+class RatiosCfg(_Cfg):
+    min_events: int = Field(default=10, ge=1, description="Por debajo: 'insuficiente'")
+    bootstrap_iterations: int = Field(default=1000, ge=100)
+    seed: int = 13
+    ci: float = Field(default=0.95, gt=0, lt=1)
 
 
 class ReformulationCfg(_Cfg):
@@ -92,6 +112,8 @@ class ThresholdsCfg(_Cfg):
     interruption: InterruptionCfg = InterruptionCfg()
     reformulation: ReformulationCfg = ReformulationCfg()
     protagonism: ProtagonismCfg = ProtagonismCfg()
+    moderator: ModeratorCfg = ModeratorCfg()
+    ratios: RatiosCfg = RatiosCfg()
 
 
 class PrivacyCfg(_Cfg):
