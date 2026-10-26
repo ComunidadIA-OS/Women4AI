@@ -61,10 +61,26 @@ _U = {"u", "unknown", "desconocido", "no consta", "nc", "no binario", "no binari
       "nonbinary", "no binari", "otro", "otra", "x"}  # fmt: skip
 
 
+_ROLE = {"moderador": "moderator", "moderadora": "moderator", "presentador": "moderator",
+         "presentadora": "moderator", "conductor": "moderator", "conductora": "moderator",
+         "moderator": "moderator", "invitado": "guest", "invitada": "guest", "convidat": "guest",
+         "convidada": "guest", "tertuliano": "guest", "tertuliana": "guest", "guest": "guest"}  # fmt: skip
+
+
 @dataclass(frozen=True)
 class MetaRow:
     public_name: str | None
     gender: Gender | None  # None = vacío → clasificador
+    role: str | None = None  # "moderator" | "guest" | None (columna opcional ``rol``)
+
+
+def parse_role(value: str) -> str | None:
+    v = _norm(value)
+    if not v:
+        return None
+    if v not in _ROLE:
+        raise ValueError(f"rol no reconocido: {value!r} (usa moderador/a, invitado/a o déjalo vacío)")
+    return _ROLE[v]
 
 
 def _norm(s: str) -> str:
@@ -100,9 +116,12 @@ def load_metadata(path: Path) -> dict[str, MetaRow]:
                 raise ValueError(f"{path}:{line}: {spk} repetido")
             try:
                 gender = parse_gender(r["genero_publico"] or "")
+                role = parse_role(r.get("rol") or "")
             except ValueError as e:
                 raise ValueError(f"{path}:{line}: {e}") from None
-            rows[spk] = MetaRow(public_name=(r["nombre_publico"] or "").strip() or None, gender=gender)
+            rows[spk] = MetaRow(
+                public_name=(r["nombre_publico"] or "").strip() or None, gender=gender, role=role
+            )
     return rows
 
 
@@ -317,6 +336,7 @@ def build_speakers(
                     "total_s": round(total, 3),
                     "clean_s": None if clean is None else round(clean, 3),
                     "public_name": name,
+                    "role": row.role if row else None,
                 }
             )
         )

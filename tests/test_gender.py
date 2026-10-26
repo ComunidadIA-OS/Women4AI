@@ -21,7 +21,13 @@ import pytest
 from conftest import ROOT, S, T
 from explicometro import gender
 from explicometro.config import RuntimeCfg, StageCfg, load_config
-from explicometro.metrics import presence, unknown_share
+from explicometro.metrics import (
+    presence_from,
+    speakers_by_gender,
+    speech_by_gender,
+    unknown_from,
+    words_by_gender,
+)
 from explicometro.schemas import AudioMeta, Gender, GenderSource, Segment
 
 pytest.importorskip("sklearn")
@@ -230,10 +236,11 @@ def test_metrics_exclude_unknown_and_report_it():
         T(1, "SPK_01", 30, 60, "b " * 30),
         T(2, "SPK_02", 60, 100, "c " * 40),
     ]
-    p = presence(turns, spk)
+    stats = speakers_by_gender(spk), speech_by_gender(turns, spk), words_by_gender(turns, spk)
+    p = presence_from(*stats)
     assert set(p.by_gender) == {H, M}
     assert p.by_gender[M].time == pytest.approx(0.5) and p.by_gender[M].speakers == pytest.approx(0.5)
-    u = unknown_share(turns, spk)
+    u = unknown_from(*stats)
     assert (u.speakers, u.time_s) == (1, 40.0)
     assert u.time_share == pytest.approx(0.4) and u.words_share == pytest.approx(0.4)
 
@@ -407,3 +414,19 @@ def test_train_gender_script_end_to_end(tmp_path):
         == 0
     )
     assert calls == []
+
+
+def test_metadata_role_column(tmp_path, episode):
+    _wav, diar, _ = episode
+    p = tmp_path / "s.csv"
+    p.write_text(
+        "spk_id,nombre_publico,genero_publico,rol\nSPK_00,,M,Moderadora\nSPK_01,,,invitado\n",
+        encoding="utf-8",
+    )
+    meta = gender.load_metadata(p)
+    assert (meta["SPK_00"].role, meta["SPK_01"].role) == ("moderator", "guest")
+    by = {s.id: s for s in gender.build_speakers(diar, meta, {}, use_public_names=False)}
+    assert by["SPK_00"].role == "moderator" and by["SPK_02"].role is None
+    p.write_text("spk_id,nombre_publico,genero_publico,rol\nSPK_00,,M,jefa\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="rol no reconocido"):
+        gender.load_metadata(p)
