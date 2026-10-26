@@ -53,10 +53,10 @@ Detalle en [`docs/architecture.md`](docs/architecture.md).
 | asr | `asr_words.json` | faster-whisper large-v3-turbo · bsc-large-v3-cat · LoS-punctuated (transformers) | stub |
 | align | `transcript.json` | mayor solape; en solape gana quien empezó antes salvo palabra entera en el nuevo | igual |
 | gender | `speakers.json` | metadata CSV > ECAPA + LogisticRegression > `U` | solo metadata, resto `U` |
-| turns | `turns.parquet` | agrupación de palabras | igual |
+| turns | `turns.parquet` | segmentos del mismo hablante con hueco < 0,3 s + palabras; asentimientos marcados | igual |
 | llm | `llm_events.json` | Salamandra 7B instruct (API OpenAI-compatible) | stub |
-| events | `events.parquet` | C1 por reglas + C2 con MrBERT-es | C1 reglas, C2 stub |
-| metrics | `metrics.json` | funciones puras | igual |
+| events | `events.parquet` | C1 por reglas (+ recuperación), moderador, C2 con MrBERT-es | C1 reglas, C2 stub |
+| metrics | `metrics.json` | A, B, tasas por díada, ratios con n; agregado con IC bootstrap | igual |
 | report | `report.md` | Markdown | igual |
 
 ## Métricas
@@ -84,6 +84,9 @@ data/               raw/ interim/ processed/ (ignorados) · annotations/ (versio
 tests/              pytest con casos sintéticos
 docs/               arquitectura
 ```
+
+Definiciones operativas de turnos, C1, moderador, tasas, ratios e IC:
+[`docs/metrics.md`](docs/metrics.md). Agregado por corpus/cadena/año: `make aggregate`.
 
 Sobre el género de los hablantes (qué infiere el clasificador y qué no, prioridad de la
 metadata pública, clase `U`): [`docs/gender.md`](docs/gender.md).

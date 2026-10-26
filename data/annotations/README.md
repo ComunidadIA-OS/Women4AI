@@ -13,5 +13,5 @@ data/annotations/<episodio>/events.json   # lista de Event (schemas.py)
   del programa, web de la cadena). Formato y reglas en `docs/gender.md`.
 
 ```
-data/annotations/speakers_<episodio>.csv  # spk_id, nombre_publico, genero_publico
+data/annotations/speakers_<episodio>.csv  # spk_id, nombre_publico, genero_publico[, rol]
 ```

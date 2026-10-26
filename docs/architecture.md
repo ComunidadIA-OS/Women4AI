@@ -59,6 +59,10 @@ un `metrics.json` vacío pero válido, con `dry_run: true`.
 | asr | Ventana = núcleo ± 5 s; la no-voz se silencia; palabras fuera de la voz se descartan; fusión por punto medio + deduplicación. | sí |
 | align | Regla de solape por palabra (ver docstring de `align.py`), con índice por cubetas de 1 s. | n/a |
 
+Después: `turns` une segmentos de diarización y asigna palabras; `events` detecta C1, el
+moderador y marca sus eventos; `metrics` calcula el episodio y `scripts/aggregate.py` agrupa.
+Definiciones en `docs/metrics.md`.
+
 Fronteras de trozo: cada ~`chunk_s` se busca el centro del silencio del VAD más cercano dentro
 de ±`chunk_margin_s`; si no hay, se corta en el punto nominal y el margen cubre la palabra.
 

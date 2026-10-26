@@ -21,16 +21,20 @@ Entrega: **30/10/2026 08:00**. Prioridad: funciona > validado > bonito.
       `evidence` comprobada como cita literal del turno.
 - [ ] `events` C2: MrBERT-es + coseno sobre los 5 turnos previos del receptor; filtro de
       atribución explícita (`thresholds.reformulation.attribution_patterns`).
+- [x] `turns`, `events` (C1, moderador) y `metrics` (episodio + agregado con IC bootstrap).
+- [ ] Validar la heurística de moderador y C1 con 2–3 episodios anotados (`make eval`).
 - [ ] Anotar 2–3 episodios y calibrar `cos_threshold` (C2).
-- [ ] Agregación por programa: ratio de asimetría con IC 95 % por bootstrap (remuestreo de
-      episodios).
 
 ## Decisiones simples tomadas hoy (y alternativa apuntada)
 
 | Decisión | Alternativa para más adelante |
 |---|---|
 | Alineación palabra→hablante por máximo solape | Re-segmentar turnos con los límites de palabra y la diarización (p. ej. WhisperX) |
-| Turnos = palabras del mismo hablante con hueco ≤ 0,75 s | Turnos a partir de RTTM fusionando segmentos cortos |
+| Turnos = segmentos de diarización del mismo hablante con hueco < 0,3 s | Turnos por palabras del ASR (más sensibles a errores de timestamps) |
+| "A recupera" = siguiente turno (no de B) es de A y llega ≤ 5 s tras acabar B | Medir el tiempo hasta que A vuelve a tener la palabra, sin umbral |
+| Moderador por cesiones + apertura/cierre, con margen 1,5× | Clasificador de roles con rasgos léxicos (preguntas, nombres de turno) |
+| Exceso de interrupción solo con díadas conocidas (U fuera) | Contar también C1 emitidas por U hacia M |
+| Agregado = suma de estadísticos suficientes (ratio de totales) | Modelo de efectos mixtos por programa |
 | Moderador/a sin detectar (`protagonism.moderator = None`) | Heurística: más turnos cortos + preguntas + apertura/cierre; o metadato público |
 | Género U si confianza < `min_conf` (0,8) o < 30 s de voz limpia | Calibrar umbral con episodios anotados por programa |
 | Clasificador de género con embeddings ECAPA congelados + LogisticRegression | Ajuste ligero de HuBERT (BSC-LT/hubert-base-los-6k) |

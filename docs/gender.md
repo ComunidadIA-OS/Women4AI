@@ -33,11 +33,14 @@ públicos. No sirven para etiquetar a personas concretas, y ningún output las n
 ### CSV de metadatos
 
 ```csv
-spk_id,nombre_publico,genero_publico
-SPK_00,Nombre de la presentadora,M
-SPK_01,,
-SPK_02,Nombre,no binario
+spk_id,nombre_publico,genero_publico,rol
+SPK_00,Nombre de la presentadora,M,moderadora
+SPK_01,,,
+SPK_02,Nombre,no binario,invitada
 ```
+
+- `rol` (opcional): `moderador/a`, `presentador/a` o `invitado/a`; fija o excluye al moderador
+  (ver `docs/metrics.md`).
 
 - `spk_id`: el ID anónimo de la diarización (escucha el audio para asignarlo). Si cambias la
   configuración de la diarización, revisa el CSV: los IDs pueden cambiar.
