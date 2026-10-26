@@ -29,7 +29,9 @@ dependencies = [
 
 [project.optional-dependencies]
 # Audio ligero en CPU: Silero VAD (ONNX dentro de faster-whisper) y estructuras de pyannote.
-audio = ["faster-whisper>=1.1,<2", "pyannote.core>=5.0,<6"]
+audio = ["faster-whisper>=1.1,<2", "pyannote.core>=5.0,<6", "scikit-learn>=1.5", "joblib>=1.4"]
+# Entrenamiento del clasificador de género: SDK de Mozilla Data Collective (Common Voice).
+train = ["datacollective>=0.7"]
 # Modelos en GPU. V100S: fp16/int8, sin bf16 ni flash-attention.
 gpu = [
   "explicometro[audio]",
@@ -39,8 +41,6 @@ gpu = [
   "speechbrain>=1.0",
   "transformers>=4.44",
   "sentence-transformers>=3.0",
-  "scikit-learn>=1.5",
-  "joblib>=1.4",
 ]
 app = ["streamlit>=1.46"]
 dev = ["ruff>=0.6", "pytest>=8", "pytest-cov>=5"]

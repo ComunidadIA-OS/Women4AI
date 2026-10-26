@@ -1,0 +1,35 @@
+# Entrenamiento del clasificador de género de voz (scripts/train_gender.py).
+#
+# Common Voice se distribuye desde oct. 2025 en Mozilla Data Collective (MDC), no en HF.
+# Necesitas cuenta en MDC, aceptar las condiciones de cada dataset y MDC_API_KEY en .env.
+# Los dataset_id se copian de la ficha del dataset en MDC (Download → API / Python Access).
+# OJO: cada archivo es el idioma completo (decenas de GB). El script lo lee en streaming y
+# solo extrae los clips elegidos, pero el .tar.gz tiene que caber en download_dir.
+
+sources:
+  - locale: es
+    dataset_id: cmn4z1n52000knv07h01532dd   # Common Voice Scripted Speech 25.0 - Spanish
+    archive: null                           # o ruta a un .tar.gz ya descargado
+  - locale: ca
+    dataset_id: null                        # rellenar con el ID de "Common Voice ... - Catalan"
+    archive: null
+
+download_dir: data/raw/commonvoice
+work_dir: data/processed/gender_cv        # clips elegidos + caché de embeddings
+
+per_class: 2000            # máx. clips por clase (H, M), repartidos entre idiomas
+max_per_speaker: 5         # tope de clips por hablante (diversidad de voces)
+test_frac: 0.2             # fracción de HABLANTES en test
+max_clip_s: 10.0
+seed: 13
+
+embedding_model: speechbrain/spkrec-ecapa-voxceleb
+embedding_savedir: models/pretrained/spkrec-ecapa-voxceleb
+device: cuda               # cuda | cpu
+batch_size: 32
+
+C: 1.0                     # regularización de la LogisticRegression
+min_conf: 0.8              # mismo umbral que stages.gender.params.min_conf
+
+out_model: models/gender_lr.joblib
+out_report: models/gender_lr.report.json

@@ -10,7 +10,7 @@ DRY_EP  ?= dryrun_clip_120s
 AUDIO   ?=
 EPISODE ?=
 
-.PHONY: help setup setup-gpu fixture tts-fixture dry-run run eval app lint format test test-gpu clean
+.PHONY: help setup setup-gpu train-gender fixture tts-fixture dry-run run eval app lint format test test-gpu clean
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-10s %s\n", $$1, $$2}'
@@ -22,7 +22,7 @@ setup:  ## Crea .venv e instala núcleo + dev + app
 	@test -f .env || cp .env.example .env
 
 setup-gpu: setup  ## Añade las dependencias de modelos (GPU)
-	$(PY) -m pip install -e ".[gpu]"
+	$(PY) -m pip install -e ".[gpu,train]"
 
 $(FIXTURE):
 	$(PY) scripts/make_fixture.py $(FIXTURE)
@@ -53,6 +53,9 @@ lint:  ## ruff check + formato
 format:  ## Aplica ruff format y autofix
 	$(PY) -m ruff format .
 	$(PY) -m ruff check --fix .
+
+train-gender:  ## Entrena models/gender_lr.joblib con Common Voice (configs/gender_train.yaml)
+	$(PY) scripts/train_gender.py --config configs/gender_train.yaml
 
 test:  ## pytest (CPU; los tests GPU se saltan solos)
 	$(PY) -m pytest
