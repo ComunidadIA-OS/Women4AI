@@ -1,0 +1,41 @@
+# Datos: no se publica audio ni intermedios. Solo anotaciones.
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Audio en cualquier lugar (el fixture se genera con `make fixture`)
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+*.opus
+
+# Secretos
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Modelos y cachés locales
+models/
+*.joblib
+.cache/
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
