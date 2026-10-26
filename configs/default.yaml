@@ -12,31 +12,50 @@ runtime:
   device: cuda                   # cuda | cpu
   compute_type: float16          # V100S: float16 | int8 | int8_float16 | float32 (NUNCA bf16)
   seed: 13
+  chunk_s: 600                   # VAD y ASR por trozos de 10 min...
+  chunk_margin_s: 5              # ...con 5 s de contexto a cada lado (se fusiona sin duplicar)
 
 stages:
   ingest:
-    backend: auto                # auto: stdlib si ya es WAV 16 kHz mono PCM16; si no, ffmpeg
-    params: {sample_rate: 16000}
+    backend: ffmpeg
+    params:
+      sample_rate: 16000
+      normalize: loudnorm_2pass  # loudnorm_2pass (lineal, recomendado) | loudnorm (dinámico) | none
+      target_lufs: -23.0         # EBU R128
+      true_peak_db: -2.0
+      lra: 11.0
   vad:
-    backend: silero
-    params: {threshold: 0.5, min_speech_ms: 250, min_silence_ms: 100}
+    backend: silero              # Silero ONNX empaquetado en faster-whisper (CPU, sin descargas)
+    params: {threshold: 0.5, min_speech_ms: 250, min_silence_ms: 100, speech_pad_ms: 30}
   diarize:
     backend: pyannote
     params:
       pipeline: pyannote/speaker-diarization-3.1
-      segmentation: HiTZ/pyannote-segmentation-3.0-RTVE
-      min_speakers: null
+      use_rtve_segmentation: false            # true → segmentación HiTZ/pyannote-segmentation-3.0-RTVE
+      rtve_segmentation: HiTZ/pyannote-segmentation-3.0-RTVE
+      min_speakers: null                      # opcionales; num_speakers fija el número exacto
       max_speakers: null
+      num_speakers: null
+      segmentation_batch_size: 32             # bajar si la V100S se queda sin memoria
+      embedding_batch_size: 32
+      device_index: 0                         # 2× V100S: 0 o 1
   asr:
-    backend: faster_whisper
+    backend: faster_whisper      # faster_whisper | transformers
     params:
-      model: large-v3            # alternativa: BSC-LT/whisper-large-v3-LoS-punctuated
-      language: es               # es | ca | null (auto)
+      # faster_whisper: large-v3-turbo | BSC-LT/faster-whisper-bsc-large-v3-cat
+      # transformers:   BSC-LT/whisper-large-v3-LoS-punctuated
+      model: large-v3-turbo
+      language: es               # es | ca | null (detección automática)
+      compute_type: float16      # float16 | int8_float16 (null = runtime.compute_type)
+      device_index: 0
       beam_size: 5
-      word_timestamps: true
+      condition_on_previous_text: false       # reduce bucles/alucinaciones en audios largos
+      vad_pad_s: 0.2             # se silencia todo lo que esté fuera de la voz del VAD ± esto
+      batch_size: 8              # solo transformers
+      alignment_heads_from: openai/whisper-large-v3   # solo transformers (timestamps por palabra)
   align:
-    backend: overlap             # asigna cada palabra al hablante con más solape
-    params: {}
+    backend: overlap             # regla de solape; en zona de solape gana quien empezó antes
+    params: {max_gap_s: 0.5, eps: 0.02}
   gender:
     backend: ecapa_logreg
     params:

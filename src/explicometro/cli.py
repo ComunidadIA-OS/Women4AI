@@ -1,4 +1,11 @@
-"""CLI: ``explicometro run --audio X [--dry-run] [--only STAGE ...] [--force]``."""
+"""CLI del Explicómetro.
+
+    explicometro run --episode X [--until align] [--audio ruta] [--dry-run] [--force]
+    explicometro run --episode X --only diarize --force
+    explicometro validate data/interim/X/metrics.json
+
+Con ``--episode`` y sin ``--audio`` busca ``data/raw/X.<ext>`` (paths.raw del YAML).
+"""
 
 from __future__ import annotations
 
@@ -9,12 +16,23 @@ import sys
 from pathlib import Path
 
 from .config import load_config
-from .pipeline import STAGES, Pipeline
+from .pipeline import STAGES, Pipeline, upstream
 from .schemas import EpisodeMetrics
 
 
 def episode_id_from(path: Path) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", path.stem).strip("_") or "episode"
+
+
+AUDIO_EXTS = (".wav", ".flac", ".mp3", ".m4a", ".ogg", ".opus", ".aac", ".mp4", ".mkv", ".webm")
+
+
+def find_source(raw_dir: Path, episode: str) -> Path | None:
+    """Primer fichero de audio/vídeo en ``raw_dir`` cuyo nombre (sin extensión) es ``episode``."""
+    if not raw_dir.exists():
+        return None
+    hits = sorted(p for p in raw_dir.iterdir() if p.stem == episode and p.suffix.lower() in AUDIO_EXTS)
+    return hits[0] if hits else None
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -25,8 +43,12 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--episode", help="ID del episodio (por defecto, nombre del fichero)")
     r.add_argument("--config", type=Path, default=Path("configs/default.yaml"))
     r.add_argument("--dry-run", action="store_true", help="CPU, 120 s, stubs en etapas con modelos")
-    r.add_argument("--only", nargs="+", choices=STAGES, help="Ejecuta solo estas etapas (+deps)")
-    r.add_argument("--force", action="store_true", help="Ignora la caché de las etapas pedidas")
+    g = r.add_mutually_exclusive_group()
+    g.add_argument("--until", choices=STAGES, help="Ejecuta hasta esta etapa incluida (y sus deps)")
+    g.add_argument("--only", nargs="+", choices=STAGES, help="Ejecuta solo estas etapas (+deps desde caché)")
+    r.add_argument(
+        "--force", action="store_true", help="Recalcula: con --until, toda la cadena; con --only, esas etapas"
+    )
     r.add_argument("-v", "--verbose", action="store_true")
     v = sub.add_parser("validate", help="Valida un metrics.json contra el esquema")
     v.add_argument("path", type=Path)
@@ -49,10 +71,18 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     episode = args.episode or episode_id_from(args.audio)
     cfg = load_config(args.config if args.config.exists() else None, dry_run=args.dry_run)
-    pipe = Pipeline(cfg=cfg, episode_id=episode, source=args.audio, dry_run=args.dry_run)
-    targets = args.only or list(STAGES)
-    pipe.run(targets, force=targets if args.force else ())
-    print(f"Artefactos en {pipe.workdir}")
+    source = args.audio or find_source(cfg.paths.raw, episode)
+    if source is not None and not source.exists():
+        print(f"No existe {source}", file=sys.stderr)
+        return 2
+    pipe = Pipeline(cfg=cfg, episode_id=episode, source=source, dry_run=args.dry_run)
+    if args.only:
+        targets, force = args.only, args.only if args.force else []
+    else:
+        targets = [args.until] if args.until else list(STAGES)
+        force = upstream(targets) if args.force else []
+    pipe.run(targets, force=force)
+    print(f"Artefactos en {pipe.workdir} (tiempos en timings.jsonl, log en pipeline.log)")
     return 0
 
 

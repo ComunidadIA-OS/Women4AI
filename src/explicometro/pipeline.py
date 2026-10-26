@@ -9,9 +9,12 @@ Cada etapa:
 
 from __future__ import annotations
 
+import json
 import logging
+import time
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -183,22 +186,62 @@ class Pipeline:
                 return report.run(v["metrics"], st)
         raise ValueError(stage)
 
+    def _log_handler(self) -> logging.Handler:
+        h = logging.FileHandler(self.workdir / "pipeline.log", encoding="utf-8")
+        h.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+        h.setLevel(logging.INFO)
+        return h
+
+    def _record_timing(self, stage: str, status: str, seconds: float) -> None:
+        rec = {
+            "ts": datetime.now(UTC).isoformat(timespec="seconds"),
+            "episode": self.episode_id,
+            "stage": stage,
+            "status": status,
+            "seconds": round(seconds, 3),
+            "backend": getattr(self.cfg.stages, stage).backend,
+            "device": self.cfg.runtime.device,
+            "dry_run": self.dry_run,
+        }
+        with (self.workdir / "timings.jsonl").open("a", encoding="utf-8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
     def run(self, targets: Iterable[str] | None = None, force: Iterable[str] = ()) -> dict[str, Any]:
-        """Ejecuta ``targets`` (por defecto, todas) y lo que necesiten. Devuelve los valores."""
+        """Ejecuta ``targets`` (por defecto, todas) y lo que necesiten. Devuelve los valores.
+
+        Registra cada etapa en ``<workdir>/pipeline.log`` y su duración en ``timings.jsonl``.
+        """
         targets = list(targets or STAGES)
         force = set(force)
         self.workdir.mkdir(parents=True, exist_ok=True)
-        for stage in upstream(targets):
-            art, path = ARTIFACTS[stage], self.artifact_path(stage)
-            if stage not in force and self._cached(stage):
-                log.info("[%s] caché → %s", stage, path.name)
-                self._values[stage] = art.load(path)
-                continue
-            log.info("[%s] ejecutando (backend=%s)", stage, getattr(self.cfg.stages, stage).backend)
-            value = self._compute(stage)
-            art.save(path, value, self.episode_id)
-            self._values[stage] = art.load(path)  # round-trip: valida lo escrito contra el esquema
-            kf = self._key_file(stage)
-            kf.parent.mkdir(exist_ok=True)
-            kf.write_text(self.key(stage) + "\n")
+        root = logging.getLogger("explicometro")
+        handler = self._log_handler()
+        root.addHandler(handler)
+        if root.level == logging.NOTSET or root.level > logging.INFO:
+            root.setLevel(logging.INFO)
+        total = time.perf_counter()
+        try:
+            for stage in upstream(targets):
+                art, path = ARTIFACTS[stage], self.artifact_path(stage)
+                t0 = time.perf_counter()
+                if stage not in force and self._cached(stage):
+                    self._values[stage] = art.load(path)
+                    dt = time.perf_counter() - t0
+                    log.info("[%s] caché → %s (%.2f s)", stage, path.name, dt)
+                    self._record_timing(stage, "cache", dt)
+                    continue
+                log.info("[%s] ejecutando (backend=%s)", stage, getattr(self.cfg.stages, stage).backend)
+                value = self._compute(stage)
+                art.save(path, value, self.episode_id)
+                self._values[stage] = art.load(path)  # round-trip: valida lo escrito contra el esquema
+                kf = self._key_file(stage)
+                kf.parent.mkdir(exist_ok=True)
+                kf.write_text(self.key(stage) + "\n")
+                dt = time.perf_counter() - t0
+                log.info("[%s] terminada en %.2f s → %s", stage, dt, path.name)
+                self._record_timing(stage, "run", dt)
+            log.info("pipeline %s: %.2f s en total", self.episode_id, time.perf_counter() - total)
+        finally:
+            root.removeHandler(handler)
+            handler.close()
         return dict(self._values)
