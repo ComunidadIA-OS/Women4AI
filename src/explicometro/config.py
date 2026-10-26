@@ -96,12 +96,25 @@ class RatiosCfg(_Cfg):
     ci: float = Field(default=0.95, gt=0, lt=1)
 
 
-class ReformulationCfg(_Cfg):
-    """C2 — el umbral se calibra con anotaciones."""
+DEFAULT_ATTRIBUTION = [
+    r"como (decía|ha dicho|apuntaba) \w+",
+    r"lo que dice \w+",
+    r"tiene razón",
+    r"té raó",
+    r"com deia",
+]
 
-    cos_threshold: float = 0.8
-    window_prev_turns: int = 5
-    attribution_patterns: list[str] = Field(default_factory=list)
+
+class ReformulationCfg(_Cfg):
+    """C2 — ``cos_threshold`` (τ) se calibra en el gold set con scripts/calibrate_c2.py.
+
+    Mientras sea ``None``, C2 no emite eventos (y lo avisa): nada de umbrales a ojo.
+    """
+
+    cos_threshold: float | None = Field(default=None, ge=-1, le=1)
+    window_prev_turns: int = Field(default=5, ge=1)
+    min_words: int = Field(default=15, ge=1, description="Solo turnos con >= estas palabras")
+    attribution_patterns: list[str] = Field(default_factory=lambda: list(DEFAULT_ATTRIBUTION))
 
 
 class ProtagonismCfg(_Cfg):

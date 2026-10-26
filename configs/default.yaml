@@ -77,15 +77,33 @@ stages:
       backchannel_lexicon: [sí, ya, claro, vale, ajá, exacto, clar, sí sí]   # sin tildes al comparar
       max_word_dist_s: 1.0
   llm:
-    backend: openai_compatible
+    backend: openai_compatible   # openai_compatible | lexicon (sin LLM, para la ablación) | stub
     params:
       model: BSC-LT/salamandra-7b-instruct-2606   # LLM_MODEL en .env tiene prioridad
+      base_url: null             # LLM_BASE_URL en .env (vLLM local u OVH AI Endpoints)
+      prompt: judge_es.txt       # src/explicometro/prompts/
       temperature: 0.0
-      max_retries: 2
-      context_turns: 6
+      max_tokens: 256
+      json_mode: true            # response_format=json_object (se desactiva solo si el servidor no lo admite)
+      timeout_s: 60
+      http_retries: 2            # reintentos de red (aparte del reintento por JSON inválido)
+      max_concurrency: 4
+      min_b_words: 20            # la respuesta B debe tener >= 20 palabras
+      min_a_words: 3
+      max_words_a: 250           # se envía el final de A...
+      max_words_b: 250           # ...y el principio de B
+      min_confidence: 0.5        # etiquetas con confianza menor no generan evento
+      cache_path: data/interim/_llm_cache.sqlite
+      price_input_per_mtok: 0.0  # € por millón de tokens (0 en vLLM propio; poner el de OVH si se usa)
+      price_output_per_mtok: 0.0
   events:
     backend: mrbert              # C2: embeddings BSC-LT/MrBERT-es. C1 es por reglas siempre.
-    params: {embedding_model: BSC-LT/MrBERT-es}
+    params:
+      embedding_model: BSC-LT/MrBERT-es
+      max_length: 512
+      batch_size: 32
+      device_index: 0
+      trust_remote_code: false
   metrics:
     backend: default
     params: {}
@@ -98,11 +116,16 @@ thresholds:
     min_overlap_s: 0.5           # B entra con A hablando y se solapan >= 0,5 s...
     yield_within_s: 2.0          # ...y A cede <= 2 s después de que entre B
     recover_within_s: 5.0        # "A recupera": su siguiente turno llega <= 5 s tras acabar B
-  reformulation:                 # C2 (umbral pendiente de calibrar)
-    cos_threshold: 0.80
-    window_prev_turns: 5
-    attribution_patterns: ["como (ha )?dicho", "como dec[ií]a", "lo que (ha )?dicho",
-                           "com (ha )?dit", "com deia", "tienes razón", "tens raó"]
+  reformulation:                 # C2
+    cos_threshold: null          # τ: calibrar con scripts/calibrate_c2.py (null → C2 no emite)
+    window_prev_turns: 5         # compara con los 5 turnos previos de otros hablantes
+    min_words: 15                # solo turnos con >= 15 palabras
+    attribution_patterns:        # si B atribuye la idea, no es C2 (regex, sin distinguir mayúsculas)
+      - 'como (decía|ha dicho|apuntaba) \w+'
+      - 'lo que dice \w+'
+      - 'tiene razón'
+      - 'té raó'
+      - 'com deia'
   protagonism:
     min_open_close_turn_s: 10.0
   moderator:                     # heurística; `rol` en speakers_<ep>.csv tiene prioridad
