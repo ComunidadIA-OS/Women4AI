@@ -51,10 +51,13 @@ def test_cache_and_single_stage_rerun(cfg, clip_120s):
 
 
 def test_real_backends_fail_loudly(tmp_path, clip_120s):
+    pytest.importorskip("faster_whisper")  # vad real antes de diarize
+    if __import__("importlib").util.find_spec("pyannote.audio"):
+        pytest.skip("con pyannote instalado la diarización real se ejecutaría")
     c = load_config(ROOT / "configs" / "default.yaml")
     c = c.model_copy(update={"paths": c.paths.model_copy(update={"interim": tmp_path})})
-    with pytest.raises(BackendError, match="pendiente"):
-        Pipeline(cfg=c, episode_id="ep", source=clip_120s).run(["vad"])
+    with pytest.raises(BackendError, match="extras de GPU"):
+        Pipeline(cfg=c, episode_id="ep", source=clip_120s).run(["diarize"])
 
 
 def test_max_seconds_truncates(cfg, tmp_path):

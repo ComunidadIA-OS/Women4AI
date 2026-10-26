@@ -39,3 +39,35 @@ def S(spk: str, gender: Gender) -> Speaker:
     return Speaker(
         id=spk, gender=gender, gender_source=src, gender_conf=1.0 if src != GenderSource.NONE else 0.0
     )
+
+
+def has_flite() -> bool:
+    import shutil
+    import subprocess
+
+    if shutil.which("ffmpeg") is None:
+        return False
+    out = subprocess.run(["ffmpeg", "-hide_banner", "-filters"], capture_output=True, text=True).stdout
+    return " flite " in out
+
+
+@pytest.fixture(scope="session")
+def tts_dialogue(tmp_path_factory):
+    """Diálogo sintético de dos voces con verdad conocida (flite; ver make_tts_fixture.py).
+
+    Si existe tests/fixtures/tts_dialogue/ generado con StyleTTS2, se usa ese.
+    """
+    import json
+
+    from explicometro import io as aio
+
+    existing = FIXTURES / "tts_dialogue"
+    if (existing / "truth.json").exists() and (existing / "dialogue.wav").exists():
+        d = existing
+    else:
+        if not has_flite():
+            pytest.skip("ffmpeg sin libflite: genera el diálogo con scripts/make_tts_fixture.py")
+        d = tmp_path_factory.mktemp("tts_dialogue")
+        _load_script("make_tts_fixture").build(d)
+    meta = json.loads((d / "truth.json").read_text(encoding="utf-8"))
+    return {"dir": d, "wav": d / "dialogue.wav", "rttm": aio.read_rttm(d / "truth.rttm"), "meta": meta}
