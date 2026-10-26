@@ -1,0 +1,6 @@
+Eres una anotadora lingüística. Analiza solo el texto, sin suponer el género de nadie.
+TURNO_A: "{a}"
+RESPUESTA_B: "{b}"
+Responde SOLO con JSON:
+{"explicacion_no_solicitada": true|false, "correccion_directa": true|false, "reformula_idea_de_A": true|false, "evidencia": "<cita literal de B, máx 20 palabras>", "confianza": 0-1}
+Definiciones: explicación no solicitada = B explica a A un concepto o tema que A ya estaba tratando, sin que A lo haya pedido. Corrección directa = B afirma que A se equivoca. Reformula = B repite la idea central de A como propia.

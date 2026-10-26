@@ -133,6 +133,10 @@ class Pipeline:
             parts.append(self.cfg.thresholds.model_dump(mode="json"))
         if stage == "gender":
             parts += self._gender_inputs()
+        if stage == "llm":
+            p = self.cfg.stages.llm.parsed(llm.LlmParams)
+            prompt = llm.PROMPTS / p.prompt
+            parts += [ingest.sha256_file(prompt) if prompt.exists() else None, llm.llm_settings(p)["model"]]
         if stage == "ingest":
             if self.source is None:
                 kf = self._key_file(stage)
@@ -190,7 +194,7 @@ class Pipeline:
             case "turns":
                 return turns.run(v["diarize"], v["align"], st)
             case "llm":
-                return llm.run(v["turns"], v["gender"], st, rt)
+                return llm.run(v["turns"], v["gender"], st, rt, workdir=self.workdir)
             case "events":
                 return events.run(v["turns"], v["gender"], v["llm"], st, th, rt)
             case "metrics":
