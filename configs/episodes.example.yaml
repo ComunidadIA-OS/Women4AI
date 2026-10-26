@@ -1,0 +1,10 @@
+# Copia a configs/episodes.yaml y rellena. Solo URLs públicas y su licencia de uso.
+# `make` nunca sube el audio: va a data/raw/ (ignorado). Los hashes verificados se
+# escriben en configs/episodes.sha256, que sí se versiona.
+episodes:
+  - id: ejemplo_tertulia_2026-10-01
+    url: https://example.org/audio/tertulia_2026-10-01.mp3
+    downloader: http        # http | yt-dlp
+    sha256: null
+    source: "Ejemplo"
+    license: "Indicar condiciones de uso"
