@@ -13,6 +13,7 @@ import streamlit as st
 
 from explicometro import io as aio
 from explicometro.config import load_config
+from explicometro.report import fmt_ratio
 from explicometro.schemas import EpisodeMetrics, Event, Speaker, Turn
 
 CONFIG = Path("configs/default.yaml")
@@ -34,7 +35,8 @@ c1, c2, c3, c4 = st.columns(4)
 c1.metric("Duración (s)", f"{m.duration_s:.0f}")
 c2.metric("Habla (s)", f"{m.speech_s:.0f}")
 c3.metric("Hablantes", m.n_speakers)
-c4.metric("Ratio de asimetría", "—" if m.asymmetry_ratio is None else f"{m.asymmetry_ratio:.2f}")
+r = m.asymmetry_ratio
+c4.metric("Ratio de asimetría", f"{r.value:.2f}" if r.value is not None else r.status, help=fmt_ratio(r))
 if m.dry_run:
     st.warning("Resultado de dry-run (stubs): las métricas están vacías por diseño.")
 
@@ -58,6 +60,11 @@ rows = [
     for dy, s in dyads.items()
 ]
 st.dataframe(pd.DataFrame(rows), width="stretch")
+st.caption(
+    f"Exceso de interrupción: {fmt_ratio(m.interruption_excess)} · "
+    f"asimetría: {fmt_ratio(m.asymmetry_ratio)}. Eventos del moderador aparte: "
+    f"{sum(s.count for row in m.moderator_events.values() for s in row.values())}."
+)
 
 with st.expander("Hablantes, turnos y eventos"):
     if (d / "speakers.json").exists():

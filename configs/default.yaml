@@ -70,8 +70,12 @@ stages:
       overlap_guard_s: 0.1
       device_index: 0
   turns:
-    backend: words
-    params: {max_gap_s: 0.75}    # hueco máximo entre palabras del mismo hablante
+    backend: segments            # turnos = segmentos de diarización del mismo hablante + palabras
+    params:
+      gap_s: 0.3                 # une segmentos del mismo hablante con hueco < 0,3 s
+      backchannel_max_s: 1.0     # < 1 s → asentimiento
+      backchannel_lexicon: [sí, ya, claro, vale, ajá, exacto, clar, sí sí]   # sin tildes al comparar
+      max_word_dist_s: 1.0
   llm:
     backend: openai_compatible
     params:
@@ -91,11 +95,9 @@ stages:
 
 thresholds:
   interruption:                  # C1 (definición cerrada, ver CLAUDE.md)
-    min_overlap_s: 0.5
-    yield_within_s: 2.0
-    backchannel_max_s: 1.0
-    backchannel_lexicon: [sí, si, ya, claro, vale, ajá, aha, mhm, hm, exacto, exactamente,
-                          cierto, bueno, clar, és clar, d'acord, ja, i tant, oi, home]
+    min_overlap_s: 0.5           # B entra con A hablando y se solapan >= 0,5 s...
+    yield_within_s: 2.0          # ...y A cede <= 2 s después de que entre B
+    recover_within_s: 5.0        # "A recupera": su siguiente turno llega <= 5 s tras acabar B
   reformulation:                 # C2 (umbral pendiente de calibrar)
     cos_threshold: 0.80
     window_prev_turns: 5
@@ -103,6 +105,17 @@ thresholds:
                            "com (ha )?dit", "com deia", "tienes razón", "tens raó"]
   protagonism:
     min_open_close_turn_s: 10.0
+  moderator:                     # heurística; `rol` en speakers_<ep>.csv tiene prioridad
+    handover_max_s: 15.0         # turno corto que cede la palabra...
+    handover_gap_s: 2.0          # ...seguido de otro hablante en <= 2 s
+    edge_turns: 3                # debe hablar en los 3 primeros y en los 3 últimos turnos
+    min_handovers: 3
+    min_margin: 1.5              # el 1º debe ceder >= 1,5 × lo que cede el 2º
+  ratios:
+    min_events: 10               # menos eventos → "insuficiente", sin número
+    bootstrap_iterations: 1000   # remuestreo de episodios
+    seed: 13
+    ci: 0.95
 
 privacy:
   use_public_names: false        # true solo con metadatos públicos y activación explícita

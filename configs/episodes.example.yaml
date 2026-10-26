@@ -8,3 +8,6 @@ episodes:
     sha256: null
     source: "Ejemplo"
     license: "Indicar condiciones de uso"
+    channel: La1            # agrupaciones para scripts/aggregate.py
+    program: Tertulia de ejemplo
+    year: 2026
