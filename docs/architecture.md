@@ -48,3 +48,23 @@ que cumple el esquema.
 `--dry-run` aplica `dry_run` del YAML: CPU, `float32`, recorte a 120 s y backend `stub` en
 todas las etapas con modelos (`keep_backends` mantiene las deterministas). El resultado es
 un `metrics.json` vacío pero válido, con `dry_run: true`.
+
+## Etapas de audio (ingest → align)
+
+| Etapa | Qué hace | Por trozos |
+|---|---|---|
+| ingest | ffmpeg: mezcla a mono, `loudnorm` EBU R128 (medición + aplicación lineal), 16 kHz PCM16. Hash del original y del normalizado. | no (ffmpeg ya es streaming) |
+| vad | Silero (ONNX de faster-whisper, CPU). Segmentos recortados al núcleo del trozo y unidos en las fronteras. | sí |
+| diarize | pyannote 3.1; opcionalmente segmentación HiTZ RTVE con los hiperparámetros de 3.1. Cada pista de la `Annotation` es un `Segment`: los solapes se conservan. | no, para que las etiquetas sean coherentes |
+| asr | Ventana = núcleo ± 5 s; la no-voz se silencia; palabras fuera de la voz se descartan; fusión por punto medio + deduplicación. | sí |
+| align | Regla de solape por palabra (ver docstring de `align.py`), con índice por cubetas de 1 s. | n/a |
+
+Fronteras de trozo: cada ~`chunk_s` se busca el centro del silencio del VAD más cercano dentro
+de ±`chunk_margin_s`; si no hay, se corta en el punto nominal y el margen cubre la palabra.
+
+## Evaluación con verdad conocida
+
+`scripts/make_tts_fixture.py` sintetiza un diálogo de dos voces (StyleTTS2 o flite) con
+turnos, una interrupción y un asentimiento solapados, y escribe `truth.rttm`/`truth.json`.
+`evaluation.py` ofrece métricas por trama (VAD P/R, precisión por hablante en zonas de un solo
+hablante, recall de solapes), precisión hablante-por-palabra y WER.

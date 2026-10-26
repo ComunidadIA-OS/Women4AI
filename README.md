@@ -6,8 +6,9 @@ desagregadas por género y por díada emisor→receptor (H→M, M→H, H→H, M�
 
 Proyecto del reto *Mujeres por la IA Abierta* (SEDIA). Licencia Apache-2.0.
 
-> Estado: esqueleto. El pipeline corre de punta a punta en CPU con *stubs* (`make dry-run`);
-> los backends con modelos están declarados y pendientes de implementar.
+> Estado: `ingest → vad → diarize → asr → align` implementado (VAD y alineación validados en
+> CPU; diarización y ASR pendientes de validar en GPU con `make test-gpu`). `gender`, `llm` y C2
+> siguen en *stub*. `make dry-run` recorre todo el pipeline en CPU.
 
 ## Inicio rápido
 
@@ -18,8 +19,18 @@ make test lint
 make app         # visor Streamlit
 ```
 
-En la máquina con GPU: `make setup-gpu`, copia `.env.example` a `.env` y rellénalo, y
-`make run AUDIO=data/raw/<episodio>.wav`.
+En la máquina con GPU (2× V100S):
+
+```bash
+make setup-gpu                      # torch, pyannote.audio 3.1, transformers
+cp .env.example .env                # HF_TOKEN (acepta las condiciones de pyannote en HF)
+python scripts/run_pipeline.py --episode <id> --until align    # busca data/raw/<id>.*
+make test-gpu                       # diálogo de dos voces con verdad conocida
+```
+
+Cada ejecución deja `pipeline.log` y `timings.jsonl` (segundos por etapa) en
+`data/interim/<id>/`. Los episodios largos se procesan en trozos de 10 min con 5 s de margen
+(VAD y ASR); la diarización va sobre el episodio entero para que los hablantes sean coherentes.
 
 ## Pipeline
 
@@ -36,11 +47,11 @@ Detalle en [`docs/architecture.md`](docs/architecture.md).
 
 | Etapa | Artefacto | Backend por defecto | En dry-run |
 |---|---|---|---|
-| ingest | `audio.json` + `audio.wav` | stdlib / ffmpeg | igual (recorta a 120 s) |
-| vad | `vad.json` | Silero VAD | stub |
-| diarize | `diarization.rttm` | pyannote 3.1 + segmentación RTVE (HiTZ) | stub |
-| asr | `asr_words.json` | faster-whisper large-v3 | stub |
-| align | `transcript.json` | solape palabra↔hablante | igual |
+| ingest | `audio.json` + `audio.wav` | ffmpeg → 16 kHz mono, loudnorm EBU R128 (2 pasadas, lineal) | igual (recorta a 120 s) |
+| vad | `vad.json` | Silero VAD (ONNX, CPU) | stub |
+| diarize | `diarization.rttm` | pyannote 3.1 (flag: segmentación HiTZ RTVE), con solapes | stub |
+| asr | `asr_words.json` | faster-whisper large-v3-turbo · bsc-large-v3-cat · LoS-punctuated (transformers) | stub |
+| align | `transcript.json` | mayor solape; en solape gana quien empezó antes salvo palabra entera en el nuevo | igual |
 | gender | `speakers.json` | ECAPA + LogisticRegression | stub (todo `U`) |
 | turns | `turns.parquet` | agrupación de palabras | igual |
 | llm | `llm_events.json` | Salamandra 7B instruct (API OpenAI-compatible) | stub |
@@ -64,11 +75,11 @@ nivel de programa).
 ## Estructura
 
 ```
-src/explicometro/   schemas.py (contrato) · config.py · io.py · pipeline.py · cli.py
+src/explicometro/   schemas.py (contrato) · config.py · io.py · pipeline.py · cli.py · audio.py · chunking.py
                     ingest vad diarize asr align gender turns events metrics llm report
 app/                visor Streamlit
 configs/            default.yaml · episodes.example.yaml
-scripts/            download_episodes · run_pipeline · evaluate · make_fixture
+scripts/            download_episodes · run_pipeline · evaluate · make_fixture · make_tts_fixture
 data/               raw/ interim/ processed/ (ignorados) · annotations/ (versionado)
 tests/              pytest con casos sintéticos
 docs/               arquitectura
