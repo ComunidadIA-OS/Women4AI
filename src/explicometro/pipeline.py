@@ -131,6 +131,8 @@ class Pipeline:
         ]
         if stage in ("events", "metrics"):
             parts.append(self.cfg.thresholds.model_dump(mode="json"))
+        if stage == "gender":
+            parts += self._gender_inputs()
         if stage == "ingest":
             if self.source is None:
                 kf = self._key_file(stage)
@@ -142,6 +144,17 @@ class Pipeline:
             parts += [str(self.source.resolve()), st.st_size, st.st_mtime_ns, self._max_seconds()]
         self._keys[stage] = self.cfg.digest(*parts)
         return self._keys[stage]
+
+    def _gender_inputs(self) -> list[Any]:
+        """Entradas externas de ``gender``: CSV de metadatos, clasificador y privacidad."""
+        p = self.cfg.stages.gender.parsed(gender.GenderParams)
+        csv_path = gender.metadata_path(self.cfg.paths.annotations, self.episode_id, p)
+        clf = Path(p.classifier_path)
+        return [
+            ingest.sha256_file(csv_path) if csv_path.exists() else None,
+            [clf.stat().st_size, clf.stat().st_mtime_ns] if clf.exists() else None,
+            self.cfg.privacy.use_public_names,
+        ]
 
     def _max_seconds(self) -> float | None:
         return self.cfg.dry_run.max_seconds if self.dry_run else None
@@ -170,7 +183,10 @@ class Pipeline:
             case "align":
                 return align.run(v["asr"], v["diarize"], st)
             case "gender":
-                return gender.run(v["ingest"], wav, v["diarize"], st, rt)
+                return gender.run(
+                    v["ingest"], wav, v["diarize"], st, rt,
+                    annotations_dir=c.paths.annotations, use_public_names=c.privacy.use_public_names,
+                )  # fmt: skip
             case "turns":
                 return turns.run(v["align"], st)
             case "llm":

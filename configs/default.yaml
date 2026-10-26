@@ -57,11 +57,18 @@ stages:
     backend: overlap             # regla de solape; en zona de solape gana quien empezó antes
     params: {max_gap_s: 0.5, eps: 0.02}
   gender:
-    backend: ecapa_logreg
+    backend: ecapa_logreg        # stub = solo metadatos; el resto queda U
     params:
+      metadata_csv: "speakers_{episode}.csv"   # en paths.annotations; fuente preferente
+      classifier_path: models/gender_lr.joblib # scripts/train_gender.py
       embedding_model: speechbrain/spkrec-ecapa-voxceleb
-      classifier_path: null      # ruta a un .joblib entrenado; null = sin etiquetar
-      min_conf: 0.7              # por debajo -> U
+      embedding_savedir: models/pretrained/spkrec-ecapa-voxceleb
+      min_clean_s: 30            # voz sin solapes mínima para clasificar
+      min_conf: 0.8              # por debajo → U
+      window_s: 4.0              # ventanas para los embeddings (promediados por hablante)
+      max_windows: 120
+      overlap_guard_s: 0.1
+      device_index: 0
   turns:
     backend: words
     params: {max_gap_s: 0.75}    # hueco máximo entre palabras del mismo hablante
