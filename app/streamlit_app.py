@@ -1,0 +1,61 @@
+"""Visor mínimo de resultados: ``make app``.
+
+Lee solo artefactos del contrato (metrics.json, speakers.json, turns.parquet,
+events.parquet) desde data/interim/<episodio>/.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+from explicometro import io as aio
+from explicometro.config import load_config
+from explicometro.schemas import EpisodeMetrics, Event, Speaker, Turn
+
+CONFIG = Path("configs/default.yaml")
+
+st.set_page_config(page_title="Explicómetro", layout="wide")
+st.title("Explicómetro")
+
+cfg = load_config(CONFIG if CONFIG.exists() else None)
+episodes = sorted(p.parent.name for p in cfg.paths.interim.glob("*/metrics.json"))
+if not episodes:
+    st.info(f"No hay episodios procesados en {cfg.paths.interim}. Prueba `make dry-run`.")
+    st.stop()
+
+ep = st.sidebar.selectbox("Episodio", episodes)
+d = cfg.paths.interim / ep
+m = aio.read_model(d / "metrics.json", EpisodeMetrics)
+
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Duración (s)", f"{m.duration_s:.0f}")
+c2.metric("Habla (s)", f"{m.speech_s:.0f}")
+c3.metric("Hablantes", m.n_speakers)
+c4.metric("Ratio de asimetría", "—" if m.asymmetry_ratio is None else f"{m.asymmetry_ratio:.2f}")
+if m.dry_run:
+    st.warning("Resultado de dry-run (stubs): las métricas están vacías por diseño.")
+
+st.subheader("A. Presencia por género")
+st.dataframe(
+    pd.DataFrame({g.value: s.model_dump() for g, s in m.presence.by_gender.items()}).T,
+    width="stretch",
+)
+
+st.subheader("C. Conductas por díada")
+rows = [
+    {"tipo": t.value, "díada": dy.value, **s.model_dump()}
+    for t, dyads in m.events.items()
+    for dy, s in dyads.items()
+]
+st.dataframe(pd.DataFrame(rows), width="stretch")
+
+with st.expander("Hablantes, turnos y eventos"):
+    if (d / "speakers.json").exists():
+        st.dataframe(pd.DataFrame([s.model_dump() for s in aio.read_models(d / "speakers.json", Speaker)]))
+    if (d / "turns.parquet").exists():
+        st.dataframe(pd.DataFrame([t.model_dump() for t in aio.read_parquet(d / "turns.parquet", Turn)]))
+    if (d / "events.parquet").exists():
+        st.dataframe(pd.DataFrame([e.model_dump() for e in aio.read_parquet(d / "events.parquet", Event)]))
