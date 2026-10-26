@@ -21,6 +21,7 @@ from .schemas import (
     Protagonism,
     Speaker,
     Turn,
+    UnknownShare,
     dyad_of,
 )
 
@@ -41,18 +42,30 @@ def speech_time_by_gender(turns: list[Turn], speakers: list[Speaker]) -> dict[Ge
     return dict(out)
 
 
-def presence(turns: list[Turn], speakers: list[Speaker]) -> Presence:
-    """A: % hablantes, % tiempo y % palabras por género."""
-    if not speakers:
-        return Presence()
+KNOWN = (Gender.MALE, Gender.FEMALE)
+
+
+def _words_by_gender(turns: list[Turn], speakers: list[Speaker]) -> dict[Gender, int]:
     g = _gender_map(speakers)
-    n_spk = Counter(s.gender for s in speakers)
-    time = speech_time_by_gender(turns, speakers)
     words: dict[Gender, int] = defaultdict(int)
     for t in turns:
         words[g.get(t.speaker, Gender.UNKNOWN)] += t.n_words
-    tot_spk, tot_time, tot_words = len(speakers), sum(time.values()), sum(words.values())
-    genders = set(n_spk) | set(time) | set(words)
+    return dict(words)
+
+
+def presence(turns: list[Turn], speakers: list[Speaker]) -> Presence:
+    """A: % hablantes, % tiempo y % palabras por género, **solo sobre H y M**.
+
+    Los hablantes U no entran en numerador ni denominador; lo que queda fuera se reporta
+    con ``unknown_share``.
+    """
+    n_spk = Counter(s.gender for s in speakers if s.gender in KNOWN)
+    if not n_spk:
+        return Presence()
+    time = {k: v for k, v in speech_time_by_gender(turns, speakers).items() if k in KNOWN}
+    words = {k: v for k, v in _words_by_gender(turns, speakers).items() if k in KNOWN}
+    tot_spk, tot_time, tot_words = sum(n_spk.values()), sum(time.values()), sum(words.values())
+    genders = KNOWN
     return Presence(
         by_gender={
             gen: GenderShare(
@@ -66,7 +79,8 @@ def presence(turns: list[Turn], speakers: list[Speaker]) -> Presence:
 
 
 def protagonism(turns: list[Turn], speakers: list[Speaker], cfg: ProtagonismCfg) -> Protagonism:
-    """B: nº turnos, duración media y quién abre/cierra (primer/último turno >= umbral).
+    """B: nº turnos y duración media por género (sin U) y quién abre/cierra (primer/último
+    turno >= umbral; aquí sí se informa aunque sea U, porque es un hablante concreto).
 
     TODO: detección de moderador/a (ver ROADMAP.md).
     """
@@ -77,6 +91,8 @@ def protagonism(turns: list[Turn], speakers: list[Speaker], cfg: ProtagonismCfg)
     dur: dict[Gender, float] = defaultdict(float)
     for t in turns:
         gen = g.get(t.speaker, Gender.UNKNOWN)
+        if gen not in KNOWN:  # U excluido de las métricas por género
+            continue
         n[gen] += 1
         dur[gen] += t.duration
     long_turns = [t for t in sorted(turns, key=lambda t: t.start) if t.duration >= cfg.min_open_close_turn_s]
@@ -89,6 +105,18 @@ def protagonism(turns: list[Turn], speakers: list[Speaker], cfg: ProtagonismCfg)
         opener_gender=g.get(opener, Gender.UNKNOWN) if opener else None,
         closer=closer,
         closer_gender=g.get(closer, Gender.UNKNOWN) if closer else None,
+    )
+
+
+def unknown_share(turns: list[Turn], speakers: list[Speaker]) -> UnknownShare:
+    """Cuánto queda fuera de las métricas por género (hablantes U)."""
+    time = speech_time_by_gender(turns, speakers)
+    words = _words_by_gender(turns, speakers)
+    return UnknownShare(
+        speakers=sum(1 for s in speakers if s.gender is Gender.UNKNOWN),
+        time_s=round(time.get(Gender.UNKNOWN, 0.0), 3),
+        time_share=_ratio(time.get(Gender.UNKNOWN, 0.0), sum(time.values())),
+        words_share=_ratio(words.get(Gender.UNKNOWN, 0), sum(words.values())),
     )
 
 
@@ -155,6 +183,7 @@ def run(
         speech_s=round(sum(t.duration for t in turns), 3),
         n_speakers=len(speakers),
         presence=presence(turns, speakers),
+        unknown=unknown_share(turns, speakers),
         protagonism=protagonism(turns, speakers, thresholds.protagonism),
         events=stats,
         interruption_excess=interruption_excess(events, turns, speakers),

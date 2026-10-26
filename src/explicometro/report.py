@@ -33,6 +33,12 @@ def to_markdown(m: EpisodeMetrics) -> str:
         lines.append(f"| {_LABEL[gen]} | {_pct(s.speakers)} | {_pct(s.time)} | {_pct(s.words)} |")
     if not m.presence.by_gender:
         lines.append("| (sin datos) | — | — | — |")
+    u = m.unknown
+    lines += [
+        "",
+        f"Fuera de las métricas por género (U): {u.speakers} hablantes, {u.time_s:.1f} s "
+        f"({_pct(u.time_share)} del tiempo de habla, {_pct(u.words_share)} de las palabras).",
+    ]
     lines += ["", "## C. Conductas por díada (emisor→receptor)", ""]
     if not m.events:
         lines.append("Sin eventos detectados.")

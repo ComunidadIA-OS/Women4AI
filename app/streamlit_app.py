@@ -44,6 +44,13 @@ st.dataframe(
     width="stretch",
 )
 
+u = m.unknown
+st.caption(
+    f"Fuera de las métricas por género (U): {u.speakers} hablantes, {u.time_s:.0f} s"
+    + ("" if u.time_share is None else f" ({u.time_share:.0%} del tiempo de habla)")
+    + ". Ver docs/gender.md."
+)
+
 st.subheader("C. Conductas por díada")
 rows = [
     {"tipo": t.value, "díada": dy.value, **s.model_dump()}
