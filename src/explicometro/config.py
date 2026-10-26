@@ -6,7 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, TypeVar
 
 import yaml
 from dotenv import load_dotenv
@@ -31,15 +31,30 @@ class RuntimeCfg(_Cfg):
     device: Literal["cpu", "cuda"] = "cuda"
     compute_type: ComputeType = "float16"
     seed: int = 13
+    chunk_s: float = Field(default=600.0, gt=0, description="Trozos para VAD/ASR en episodios largos")
+    chunk_margin_s: float = Field(default=5.0, ge=0, description="Margen a cada lado de cada trozo")
 
 
 class StageCfg(_Cfg):
     backend: str = "stub"
     params: dict[str, Any] = Field(default_factory=dict)
 
+    def parsed(self, model: type[P]) -> P:
+        """Valida ``params`` contra el modelo tipado de la etapa (rechaza claves desconocidas)."""
+        return model.model_validate(self.params)
+
+
+class Params(BaseModel):
+    """Base para los parámetros tipados de cada etapa."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+P = TypeVar("P", bound=Params)
+
 
 class StagesCfg(_Cfg):
-    ingest: StageCfg = StageCfg(backend="auto", params={"sample_rate": 16000})
+    ingest: StageCfg = StageCfg(backend="ffmpeg")
     vad: StageCfg = StageCfg(backend="silero")
     diarize: StageCfg = StageCfg(backend="pyannote")
     asr: StageCfg = StageCfg(backend="faster_whisper")
