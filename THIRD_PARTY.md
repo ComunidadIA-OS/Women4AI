@@ -28,3 +28,9 @@ Columna *Verificado*: ✅ licencia comprobada en los metadatos del paquete publi
 | BSC-LT/whisper-large-v3-LoS-punctuated | — | por comprobar | asr (es/ca con puntuación) | ⚠️ |
 | openai/whisper-large-v3 (solo `generation_config`) | — | por comprobar | asr: `alignment_heads` para timestamps por palabra | ⚠️ |
 | BSC-LT/styletts2-spanish-multispeaker | — | por comprobar | solo tests: voces sintéticas con verdad conocida | ⚠️ |
+| SpeechBrain | ≥1.0 | Apache-2.0 | gender: embeddings ECAPA | ✅ |
+| scikit-learn | ≥1.5 | BSD-3-Clause | gender: LogisticRegression y métricas | ✅ |
+| joblib | ≥1.4 | BSD-3-Clause | gender: guardar/cargar `models/gender_lr.joblib` | ✅ |
+| datacollective (SDK de Mozilla Data Collective) | ≥0.7 | MPL-2.0 | scripts/train_gender.py: descarga de Common Voice | ✅ |
+| speechbrain/spkrec-ecapa-voxceleb | — | por comprobar | gender: embeddings de hablante | ⚠️ |
+| Common Voice Scripted Speech (es, ca) | 25.0 | por comprobar en MDC (históricamente CC0-1.0) | entrenamiento/evaluación del clasificador de género | ⚠️ |

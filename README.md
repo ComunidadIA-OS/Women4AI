@@ -7,8 +7,8 @@ desagregadas por género y por díada emisor→receptor (H→M, M→H, H→H, M�
 Proyecto del reto *Mujeres por la IA Abierta* (SEDIA). Licencia Apache-2.0.
 
 > Estado: `ingest → vad → diarize → asr → align` implementado (VAD y alineación validados en
-> CPU; diarización y ASR pendientes de validar en GPU con `make test-gpu`). `gender`, `llm` y C2
-> siguen en *stub*. `make dry-run` recorre todo el pipeline en CPU.
+> CPU; diarización y ASR pendientes de validar en GPU con `make test-gpu`). `gender` implementado
+> (falta entrenar el clasificador: `make train-gender`). `llm` y C2 siguen en *stub*. `make dry-run` recorre todo el pipeline en CPU.
 
 ## Inicio rápido
 
@@ -52,7 +52,7 @@ Detalle en [`docs/architecture.md`](docs/architecture.md).
 | diarize | `diarization.rttm` | pyannote 3.1 (flag: segmentación HiTZ RTVE), con solapes | stub |
 | asr | `asr_words.json` | faster-whisper large-v3-turbo · bsc-large-v3-cat · LoS-punctuated (transformers) | stub |
 | align | `transcript.json` | mayor solape; en solape gana quien empezó antes salvo palabra entera en el nuevo | igual |
-| gender | `speakers.json` | ECAPA + LogisticRegression | stub (todo `U`) |
+| gender | `speakers.json` | metadata CSV > ECAPA + LogisticRegression > `U` | solo metadata, resto `U` |
 | turns | `turns.parquet` | agrupación de palabras | igual |
 | llm | `llm_events.json` | Salamandra 7B instruct (API OpenAI-compatible) | stub |
 | events | `events.parquet` | C1 por reglas + C2 con MrBERT-es | C1 reglas, C2 stub |
@@ -84,6 +84,9 @@ data/               raw/ interim/ processed/ (ignorados) · annotations/ (versio
 tests/              pytest con casos sintéticos
 docs/               arquitectura
 ```
+
+Sobre el género de los hablantes (qué infiere el clasificador y qué no, prioridad de la
+metadata pública, clase `U`): [`docs/gender.md`](docs/gender.md).
 
 Ver [`CONTRIBUTING.md`](CONTRIBUTING.md), [`ROADMAP.md`](ROADMAP.md) y
 [`THIRD_PARTY.md`](THIRD_PARTY.md).
