@@ -6,6 +6,9 @@ data/processed/*
 !data/interim/.gitkeep
 !data/processed/.gitkeep
 
+# Fixtures generados (make fixture / make tts-fixture)
+tests/fixtures/tts_dialogue/
+
 # Audio en cualquier lugar (el fixture se genera con `make fixture`)
 *.wav
 *.mp3

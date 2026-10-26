@@ -20,10 +20,13 @@ jobs:
           python-version: "3.11"
           cache: pip
 
+      - name: ffmpeg (con libflite para el diálogo TTS de test)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+
       - name: Instalar (solo CPU, sin extras GPU)
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev]"
+          pip install -e ".[dev,audio]"
 
       - name: Ruff
         run: |

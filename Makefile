@@ -10,7 +10,7 @@ DRY_EP  ?= dryrun_clip_120s
 AUDIO   ?=
 EPISODE ?=
 
-.PHONY: help setup setup-gpu fixture dry-run run eval app lint format test clean
+.PHONY: help setup setup-gpu fixture tts-fixture dry-run run eval app lint format test test-gpu clean
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-10s %s\n", $$1, $$2}'
@@ -18,7 +18,7 @@ help:  ## Muestra esta ayuda
 setup:  ## Crea .venv e instala núcleo + dev + app
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -e ".[dev,app]"
+	$(PY) -m pip install -e ".[dev,app,audio]"
 	@test -f .env || cp .env.example .env
 
 setup-gpu: setup  ## Añade las dependencias de modelos (GPU)
@@ -29,13 +29,16 @@ $(FIXTURE):
 
 fixture: $(FIXTURE)  ## Genera el clip sintético de 120 s
 
+tts-fixture:  ## Diálogo TTS de dos voces con verdad (TTS=flite|styletts2, TTS_CMD=..., VOICES=A=..,B=..)
+	$(PY) scripts/make_tts_fixture.py --tts $(or $(TTS),flite) $(if $(TTS_CMD),--tts-cmd '$(TTS_CMD)') $(if $(VOICES),--voices $(VOICES))
+
 dry-run: $(FIXTURE)  ## Pipeline completo en CPU con stubs sobre el fixture
 	$(PY) scripts/run_pipeline.py --audio $(FIXTURE) --episode $(DRY_EP) --config $(CONFIG) --dry-run --force
 	$(PY) -m explicometro validate data/interim/$(DRY_EP)/metrics.json
 
-run:  ## Pipeline real: make run AUDIO=data/raw/x.wav [EPISODE=id]
-	@test -n "$(AUDIO)" || (echo "Uso: make run AUDIO=ruta [EPISODE=id]" && exit 2)
-	$(PY) scripts/run_pipeline.py --audio $(AUDIO) $(if $(EPISODE),--episode $(EPISODE)) --config $(CONFIG)
+run:  ## Pipeline real: make run EPISODE=id [UNTIL=align] [AUDIO=ruta] (busca data/raw/<id>.*)
+	@test -n "$(EPISODE)$(AUDIO)" || (echo "Uso: make run EPISODE=id [UNTIL=etapa] [AUDIO=ruta]" && exit 2)
+	$(PY) scripts/run_pipeline.py $(if $(EPISODE),--episode $(EPISODE)) $(if $(AUDIO),--audio $(AUDIO)) $(if $(UNTIL),--until $(UNTIL)) --config $(CONFIG)
 
 eval:  ## Evalúa eventos contra data/annotations/
 	$(PY) scripts/evaluate.py --config $(CONFIG)
@@ -51,8 +54,11 @@ format:  ## Aplica ruff format y autofix
 	$(PY) -m ruff format .
 	$(PY) -m ruff check --fix .
 
-test:  ## pytest (CPU)
+test:  ## pytest (CPU; los tests GPU se saltan solos)
 	$(PY) -m pytest
+
+test-gpu:  ## Tests en la V100S (necesita extras [gpu] y HF_TOKEN)
+	$(PY) -m pytest -m gpu -v
 
 clean:  ## Borra artefactos intermedios y cachés (no toca data/raw ni annotations)
 	rm -rf data/interim/* data/processed/* .pytest_cache .ruff_cache
