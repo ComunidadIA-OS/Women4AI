@@ -18,7 +18,7 @@ from typing import Annotated, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-SCHEMA_VERSION = "0.1.0"
+SCHEMA_VERSION = "0.2.0"
 
 SpeakerId = Annotated[str, Field(pattern=r"^SPK_\d{2,}$")]
 EpisodeId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_.-]+$", min_length=1)]
@@ -117,11 +117,20 @@ class Turn(_Interval):
 
 
 class Speaker(_Base):
+    """Hablante anonimizado.
+
+    ``gender`` es una etiqueta binaria de voz (o la pública de los metadatos), no una
+    identidad: ver docs/gender.md. ``public_name`` solo se rellena desde metadatos públicos
+    y con ``privacy.use_public_names: true``.
+    """
+
     id: SpeakerId
     gender: Gender = Gender.UNKNOWN
     gender_source: GenderSource = GenderSource.NONE
     gender_conf: Prob = 0.0
     total_s: Seconds = 0.0
+    clean_s: Seconds | None = Field(default=None, description="Voz sin solapes usada para clasificar")
+    public_name: str | None = None
 
     @model_validator(mode="after")
     def _check_gender(self) -> Self:
@@ -160,7 +169,7 @@ class GenderShare(_Base):
 
 
 class Presence(_Base):
-    """Bloque A: proporciones por género."""
+    """Bloque A: proporciones por género, calculadas solo sobre hablantes H y M."""
 
     by_gender: dict[Gender, GenderShare] = Field(default_factory=dict)
 
@@ -175,6 +184,15 @@ class Protagonism(_Base):
     closer: SpeakerId | None = None
     closer_gender: Gender | None = None
     moderator: SpeakerId | None = None
+
+
+class UnknownShare(_Base):
+    """Lo que queda fuera de las métricas por género (hablantes U)."""
+
+    speakers: int = Field(default=0, ge=0)
+    time_s: Seconds = 0.0
+    time_share: Prob | None = Field(default=None, description="Sobre el tiempo total de habla")
+    words_share: Prob | None = None
 
 
 class DyadStats(_Base):
@@ -193,6 +211,7 @@ class EpisodeMetrics(_Base):
     speech_s: Seconds = 0.0
     n_speakers: int = Field(default=0, ge=0)
     presence: Presence = Field(default_factory=Presence)
+    unknown: UnknownShare = Field(default_factory=UnknownShare)
     protagonism: Protagonism = Field(default_factory=Protagonism)
     events: dict[EventType, dict[Dyad, DyadStats]] = Field(default_factory=dict)
     interruption_excess: float | None = Field(
