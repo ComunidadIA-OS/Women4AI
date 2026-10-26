@@ -1,0 +1,89 @@
+# Configuración por defecto del Explicómetro.
+# Rutas relativas a la raíz del repo. Secretos (HF_TOKEN, LLM_API_KEY, LLM_BASE_URL,
+# LLM_MODEL) van en .env, nunca aquí.
+
+paths:
+  raw: data/raw
+  interim: data/interim          # data/interim/<episodio>/<artefacto>
+  processed: data/processed
+  annotations: data/annotations
+
+runtime:
+  device: cuda                   # cuda | cpu
+  compute_type: float16          # V100S: float16 | int8 | int8_float16 | float32 (NUNCA bf16)
+  seed: 13
+
+stages:
+  ingest:
+    backend: auto                # auto: stdlib si ya es WAV 16 kHz mono PCM16; si no, ffmpeg
+    params: {sample_rate: 16000}
+  vad:
+    backend: silero
+    params: {threshold: 0.5, min_speech_ms: 250, min_silence_ms: 100}
+  diarize:
+    backend: pyannote
+    params:
+      pipeline: pyannote/speaker-diarization-3.1
+      segmentation: HiTZ/pyannote-segmentation-3.0-RTVE
+      min_speakers: null
+      max_speakers: null
+  asr:
+    backend: faster_whisper
+    params:
+      model: large-v3            # alternativa: BSC-LT/whisper-large-v3-LoS-punctuated
+      language: es               # es | ca | null (auto)
+      beam_size: 5
+      word_timestamps: true
+  align:
+    backend: overlap             # asigna cada palabra al hablante con más solape
+    params: {}
+  gender:
+    backend: ecapa_logreg
+    params:
+      embedding_model: speechbrain/spkrec-ecapa-voxceleb
+      classifier_path: null      # ruta a un .joblib entrenado; null = sin etiquetar
+      min_conf: 0.7              # por debajo -> U
+  turns:
+    backend: words
+    params: {max_gap_s: 0.75}    # hueco máximo entre palabras del mismo hablante
+  llm:
+    backend: openai_compatible
+    params:
+      model: BSC-LT/salamandra-7b-instruct-2606   # LLM_MODEL en .env tiene prioridad
+      temperature: 0.0
+      max_retries: 2
+      context_turns: 6
+  events:
+    backend: mrbert              # C2: embeddings BSC-LT/MrBERT-es. C1 es por reglas siempre.
+    params: {embedding_model: BSC-LT/MrBERT-es}
+  metrics:
+    backend: default
+    params: {}
+  report:
+    backend: markdown
+    params: {}
+
+thresholds:
+  interruption:                  # C1 (definición cerrada, ver CLAUDE.md)
+    min_overlap_s: 0.5
+    yield_within_s: 2.0
+    backchannel_max_s: 1.0
+    backchannel_lexicon: [sí, si, ya, claro, vale, ajá, aha, mhm, hm, exacto, exactamente,
+                          cierto, bueno, clar, és clar, d'acord, ja, i tant, oi, home]
+  reformulation:                 # C2 (umbral pendiente de calibrar)
+    cos_threshold: 0.80
+    window_prev_turns: 5
+    attribution_patterns: ["como (ha )?dicho", "como dec[ií]a", "lo que (ha )?dicho",
+                           "com (ha )?dit", "com deia", "tienes razón", "tens raó"]
+  protagonism:
+    min_open_close_turn_s: 10.0
+
+privacy:
+  use_public_names: false        # true solo con metadatos públicos y activación explícita
+
+dry_run:                         # --dry-run: CPU, 120 s, stubs en etapas con modelos
+  max_seconds: 120
+  device: cpu
+  compute_type: float32
+  backend: stub
+  keep_backends: [ingest, align, turns, metrics, report]
