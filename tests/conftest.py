@@ -30,8 +30,10 @@ def clip_120s() -> Path:
     return path
 
 
-def T(i: int, spk: str, start: float, end: float, text: str = "bla bla bla bla") -> Turn:
-    return Turn(id=i, speaker=spk, start=start, end=end, text=text, n_words=len(text.split()))
+def T(i: int, spk: str, start: float, end: float, text: str = "bla bla bla bla", bc: bool = False) -> Turn:
+    return Turn(
+        id=i, speaker=spk, start=start, end=end, text=text, n_words=len(text.split()), is_backchannel=bc
+    )
 
 
 def S(spk: str, gender: Gender) -> Speaker:

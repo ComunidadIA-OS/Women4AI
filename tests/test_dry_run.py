@@ -21,7 +21,7 @@ def cfg(tmp_path):
 def test_dry_run_config_is_cpu_and_stub(cfg):
     assert cfg.runtime.device == "cpu"
     assert cfg.stages.diarize.backend == "stub" and cfg.stages.asr.backend == "stub"
-    assert cfg.stages.turns.backend == "words"  # determinista: se mantiene
+    assert cfg.stages.turns.backend == "segments"  # determinista: se mantiene
 
 
 def test_dry_run_end_to_end(cfg, clip_120s):

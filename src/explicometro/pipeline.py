@@ -36,7 +36,7 @@ DEPS: dict[str, tuple[str, ...]] = {
     "asr": ("ingest", "vad"),
     "align": ("asr", "diarize"),
     "gender": ("ingest", "diarize"),
-    "turns": ("align",),
+    "turns": ("diarize", "align"),
     "llm": ("turns", "gender"),
     "events": ("turns", "gender", "llm"),
     "metrics": ("ingest", "gender", "turns", "events"),
@@ -188,7 +188,7 @@ class Pipeline:
                     annotations_dir=c.paths.annotations, use_public_names=c.privacy.use_public_names,
                 )  # fmt: skip
             case "turns":
-                return turns.run(v["align"], st)
+                return turns.run(v["diarize"], v["align"], st)
             case "llm":
                 return llm.run(v["turns"], v["gender"], st, rt)
             case "events":
