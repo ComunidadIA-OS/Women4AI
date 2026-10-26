@@ -8,7 +8,8 @@ Proyecto del reto *Mujeres por la IA Abierta* (SEDIA). Licencia Apache-2.0.
 
 > Estado: `ingest → vad → diarize → asr → align` implementado (VAD y alineación validados en
 > CPU; diarización y ASR pendientes de validar en GPU con `make test-gpu`). `gender` implementado
-> (falta entrenar el clasificador: `make train-gender`). `llm` y C2 siguen en *stub*. `make dry-run` recorre todo el pipeline en CPU.
+> (falta entrenar el clasificador: `make train-gender`). C3/C4 con juez LLM cegado y C2 por
+> embeddings implementados (falta servir el LLM y calibrar τ: `make calibrate-c2`). `make dry-run` recorre todo el pipeline en CPU.
 
 ## Inicio rápido
 
@@ -54,7 +55,7 @@ Detalle en [`docs/architecture.md`](docs/architecture.md).
 | align | `transcript.json` | mayor solape; en solape gana quien empezó antes salvo palabra entera en el nuevo | igual |
 | gender | `speakers.json` | metadata CSV > ECAPA + LogisticRegression > `U` | solo metadata, resto `U` |
 | turns | `turns.parquet` | segmentos del mismo hablante con hueco < 0,3 s + palabras; asentimientos marcados | igual |
-| llm | `llm_events.json` | Salamandra 7B instruct (API OpenAI-compatible) | stub |
+| llm | `llm_events.json` (+ `llm_usage.json`) | juez Salamandra 7B cegado (OpenAI-compatible) o `lexicon` | stub |
 | events | `events.parquet` | C1 por reglas (+ recuperación), moderador, C2 con MrBERT-es | C1 reglas, C2 stub |
 | metrics | `metrics.json` | A, B, tasas por díada, ratios con n; agregado con IC bootstrap | igual |
 | report | `report.md` | Markdown | igual |
@@ -87,6 +88,9 @@ docs/               arquitectura
 
 Definiciones operativas de turnos, C1, moderador, tasas, ratios e IC:
 [`docs/metrics.md`](docs/metrics.md). Agregado por corpus/cadena/año: `make aggregate`.
+
+Juez LLM (cegado, validación, caché, coste), modo solo-léxico, C2 y calibración de τ:
+[`docs/llm.md`](docs/llm.md).
 
 Sobre el género de los hablantes (qué infiere el clasificador y qué no, prioridad de la
 metadata pública, clase `U`): [`docs/gender.md`](docs/gender.md).

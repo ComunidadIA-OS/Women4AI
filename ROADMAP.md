@@ -17,10 +17,12 @@ Entrega: **30/10/2026 08:00**. Prioridad: funciona > validado > bonito.
 - [ ] (Opcional) Comparar con un ajuste ligero de `BSC-LT/hubert-base-los-6k`: congelar el
       encoder, pooling medio + cabeza lineal, mismo split por hablante y mismo reporte; usarlo
       solo si mejora la cobertura a umbral 0,8 sin bajar la accuracy por hablante.
-- [ ] `llm`: cliente OpenAI-compatible, prompt C3/C4, salida JSON validada con pydantic y
-      `evidence` comprobada como cita literal del turno.
-- [ ] `events` C2: MrBERT-es + coseno sobre los 5 turnos previos del receptor; filtro de
-      atribución explícita (`thresholds.reformulation.attribution_patterns`).
+- [x] `llm`: juez cegado C3/C4 (JSON validado, reintento, caché, coste) y modo `lexicon`.
+- [x] `events` C2: MrBERT-es + coseno con los 5 turnos previos de otros + regex de atribución.
+- [ ] Servir el juez (vLLM con una versión que soporte sm_70, u OVH) y ejecutar `make ablation`.
+- [ ] Calibrar τ de C2 con el gold set (`make calibrate-c2`) y ponerlo en el YAML.
+- [ ] Control del cegado: re-juzgar una muestra neutralizando marcas de género gramatical y
+      comprobar que las tasas por díada no cambian.
 - [x] `turns`, `events` (C1, moderador) y `metrics` (episodio + agregado con IC bootstrap).
 - [ ] Validar la heurística de moderador y C1 con 2–3 episodios anotados (`make eval`).
 - [ ] Anotar 2–3 episodios y calibrar `cos_threshold` (C2).
@@ -35,6 +37,10 @@ Entrega: **30/10/2026 08:00**. Prioridad: funciona > validado > bonito.
 | Moderador por cesiones + apertura/cierre, con margen 1,5× | Clasificador de roles con rasgos léxicos (preguntas, nombres de turno) |
 | Exceso de interrupción solo con díadas conocidas (U fuera) | Contar también C1 emitidas por U hacia M |
 | Agregado = suma de estadísticos suficientes (ratio de totales) | Modelo de efectos mixtos por programa |
+| Par (A, B) = turno inmediatamente anterior de otra persona | Ventana de varios turnos previos (B responde a alguien que habló antes) |
+| "A es pregunta" por signos de interrogación en sus 2 últimas frases | Clasificador de actos de habla (no depende de la puntuación del ASR) |
+| `reformula_idea_de_A` del LLM solo para la ablación | Combinar embeddings + LLM para C2 si la ablación lo justifica |
+| Caché del juez en SQLite local | Caché compartida entre máquinas del equipo |
 | Moderador/a sin detectar (`protagonism.moderator = None`) | Heurística: más turnos cortos + preguntas + apertura/cierre; o metadato público |
 | Género U si confianza < `min_conf` (0,8) o < 30 s de voz limpia | Calibrar umbral con episodios anotados por programa |
 | Clasificador de género con embeddings ECAPA congelados + LogisticRegression | Ajuste ligero de HuBERT (BSC-LT/hubert-base-los-6k) |

@@ -34,3 +34,7 @@ Columna *Verificado*: ✅ licencia comprobada en los metadatos del paquete publi
 | datacollective (SDK de Mozilla Data Collective) | ≥0.7 | MPL-2.0 | scripts/train_gender.py: descarga de Common Voice | ✅ |
 | speechbrain/spkrec-ecapa-voxceleb | — | por comprobar | gender: embeddings de hablante | ⚠️ |
 | Common Voice Scripted Speech (es, ca) | 25.0 | por comprobar en MDC (históricamente CC0-1.0) | entrenamiento/evaluación del clasificador de género | ⚠️ |
+| openai (SDK de Python) | ≥1.40 | Apache-2.0 | llm: cliente OpenAI-compatible (vLLM / OVH AI Endpoints) | ✅ |
+| vLLM (servidor, se instala aparte) | la que soporte sm_70 | Apache-2.0 | servir el juez en la V100S | ✅ |
+| BSC-LT/salamandra-7b-instruct-2606 | — | por comprobar | llm: juez de C3/C4 | ⚠️ |
+| BSC-LT/MrBERT-es | — | por comprobar | events: embeddings de C2 | ⚠️ |
