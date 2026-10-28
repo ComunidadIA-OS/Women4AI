@@ -1,0 +1,156 @@
+# Configuración de la DEMO de entrega (notebook OVHcloud con GPU + OVHcloud AI Endpoints).
+# Igual que default.yaml salvo:
+#   - gender: solo metadatos públicos (data/annotations/speakers_<episodio>.csv). Sin CSV → U.
+#     (El clasificador ECAPA+LR existe, pero aún no está entrenado: make train-gender.)
+#   - events: C1 por reglas; C2 desactivada hasta calibrar τ (no descarga MrBERT).
+#   - llm: juez C3/C4 por API OpenAI-compatible (LLM_BASE_URL/LLM_MODEL en .env).
+#     Sin endpoint → cambia `backend: openai_compatible` por `backend: lexicon`.
+# Uso: python scripts/run_pipeline.py --config configs/demo.yaml --episode <id> --audio <ruta>
+
+paths:
+  raw: data/raw
+  interim: data/interim          # data/interim/<episodio>/<artefacto>
+  processed: data/processed
+  annotations: data/annotations
+
+runtime:
+  device: cuda                   # cuda | cpu
+  compute_type: float16          # V100S: float16 | int8 | int8_float16 | float32 (NUNCA bf16)
+  seed: 13
+  chunk_s: 600                   # VAD y ASR por trozos de 10 min...
+  chunk_margin_s: 5              # ...con 5 s de contexto a cada lado (se fusiona sin duplicar)
+
+stages:
+  ingest:
+    backend: ffmpeg
+    params:
+      sample_rate: 16000
+      normalize: loudnorm_2pass  # loudnorm_2pass (lineal, recomendado) | loudnorm (dinámico) | none
+      target_lufs: -23.0         # EBU R128
+      true_peak_db: -2.0
+      lra: 11.0
+  vad:
+    backend: silero              # Silero ONNX empaquetado en faster-whisper (CPU, sin descargas)
+    params: {threshold: 0.5, min_speech_ms: 250, min_silence_ms: 100, speech_pad_ms: 30}
+  diarize:
+    backend: pyannote
+    params:
+      pipeline: pyannote/speaker-diarization-3.1
+      use_rtve_segmentation: false            # true → segmentación HiTZ/pyannote-segmentation-3.0-RTVE
+      rtve_segmentation: HiTZ/pyannote-segmentation-3.0-RTVE
+      min_speakers: null                      # opcionales; num_speakers fija el número exacto
+      max_speakers: null
+      num_speakers: null
+      segmentation_batch_size: 32             # bajar si la V100S se queda sin memoria
+      embedding_batch_size: 32
+      device_index: 0                         # 2× V100S: 0 o 1
+  asr:
+    backend: faster_whisper      # faster_whisper | transformers
+    params:
+      # faster_whisper: large-v3-turbo | BSC-LT/faster-whisper-bsc-large-v3-cat
+      # transformers:   BSC-LT/whisper-large-v3-LoS-punctuated
+      model: large-v3-turbo
+      language: es               # es | ca | null (detección automática)
+      compute_type: float16      # float16 | int8_float16 (null = runtime.compute_type)
+      device_index: 0
+      beam_size: 5
+      condition_on_previous_text: false       # reduce bucles/alucinaciones en audios largos
+      vad_pad_s: 0.2             # se silencia todo lo que esté fuera de la voz del VAD ± esto
+      batch_size: 8              # solo transformers
+      alignment_heads_from: openai/whisper-large-v3   # solo transformers (timestamps por palabra)
+  align:
+    backend: overlap             # regla de solape; en zona de solape gana quien empezó antes
+    params: {max_gap_s: 0.5, eps: 0.02}
+  gender:
+    backend: stub                # demo: solo metadatos; el resto queda U
+    params:
+      metadata_csv: "speakers_{episode}.csv"   # en paths.annotations; fuente preferente
+      classifier_path: models/gender_lr.joblib # scripts/train_gender.py
+      embedding_model: speechbrain/spkrec-ecapa-voxceleb
+      embedding_savedir: models/pretrained/spkrec-ecapa-voxceleb
+      min_clean_s: 30            # voz sin solapes mínima para clasificar
+      min_conf: 0.8              # por debajo → U
+      window_s: 4.0              # ventanas para los embeddings (promediados por hablante)
+      max_windows: 120
+      overlap_guard_s: 0.1
+      device_index: 0
+  turns:
+    backend: segments            # turnos = segmentos de diarización del mismo hablante + palabras
+    params:
+      gap_s: 0.3                 # une segmentos del mismo hablante con hueco < 0,3 s
+      backchannel_max_s: 1.0     # < 1 s → asentimiento
+      backchannel_lexicon: [sí, ya, claro, vale, ajá, exacto, clar, sí sí]   # sin tildes al comparar
+      max_word_dist_s: 1.0
+  llm:
+    backend: openai_compatible   # openai_compatible | lexicon (sin LLM, para la ablación) | stub
+    params:
+      model: BSC-LT/salamandra-7b-instruct-2606   # LLM_MODEL en .env tiene prioridad
+      base_url: null             # LLM_BASE_URL en .env (vLLM local u OVH AI Endpoints)
+      prompt: judge_es.txt       # src/explicometro/prompts/
+      temperature: 0.0
+      max_tokens: 256
+      json_mode: true            # response_format=json_object (se desactiva solo si el servidor no lo admite)
+      timeout_s: 60
+      http_retries: 2            # reintentos de red (aparte del reintento por JSON inválido)
+      max_concurrency: 4
+      min_b_words: 20            # la respuesta B debe tener >= 20 palabras
+      min_a_words: 3
+      max_words_a: 250           # se envía el final de A...
+      max_words_b: 250           # ...y el principio de B
+      min_confidence: 0.5        # etiquetas con confianza menor no generan evento
+      cache_path: data/interim/_llm_cache.sqlite
+      price_input_per_mtok: 0.0  # € por millón de tokens (0 en vLLM propio; poner el de OVH si se usa)
+      price_output_per_mtok: 0.0
+  events:
+    backend: stub                # demo: C2 off hasta calibrar τ. C1 es por reglas siempre.
+    params:
+      embedding_model: BSC-LT/MrBERT-es
+      max_length: 512
+      batch_size: 32
+      device_index: 0
+      trust_remote_code: false
+  metrics:
+    backend: default
+    params: {}
+  report:
+    backend: markdown
+    params: {}
+
+thresholds:
+  interruption:                  # C1 (definición cerrada, ver CLAUDE.md)
+    min_overlap_s: 0.5           # B entra con A hablando y se solapan >= 0,5 s...
+    yield_within_s: 2.0          # ...y A cede <= 2 s después de que entre B
+    recover_within_s: 5.0        # "A recupera": su siguiente turno llega <= 5 s tras acabar B
+  reformulation:                 # C2
+    cos_threshold: null          # τ: calibrar con scripts/calibrate_c2.py (null → C2 no emite)
+    window_prev_turns: 5         # compara con los 5 turnos previos de otros hablantes
+    min_words: 15                # solo turnos con >= 15 palabras
+    attribution_patterns:        # si B atribuye la idea, no es C2 (regex, sin distinguir mayúsculas)
+      - 'como (decía|ha dicho|apuntaba) \w+'
+      - 'lo que dice \w+'
+      - 'tiene razón'
+      - 'té raó'
+      - 'com deia'
+  protagonism:
+    min_open_close_turn_s: 10.0
+  moderator:                     # heurística; `rol` en speakers_<ep>.csv tiene prioridad
+    handover_max_s: 15.0         # turno corto que cede la palabra...
+    handover_gap_s: 2.0          # ...seguido de otro hablante en <= 2 s
+    edge_turns: 3                # debe hablar en los 3 primeros y en los 3 últimos turnos
+    min_handovers: 3
+    min_margin: 1.5              # el 1º debe ceder >= 1,5 × lo que cede el 2º
+  ratios:
+    min_events: 10               # menos eventos → "insuficiente", sin número
+    bootstrap_iterations: 1000   # remuestreo de episodios
+    seed: 13
+    ci: 0.95
+
+privacy:
+  use_public_names: false        # true solo con metadatos públicos y activación explícita
+
+dry_run:                         # --dry-run: CPU, 120 s, stubs en etapas con modelos
+  max_seconds: 120
+  device: cpu
+  compute_type: float32
+  backend: stub
+  keep_backends: [ingest, align, turns, metrics, report]
