@@ -6,10 +6,19 @@ desagregadas por género y por díada emisor→receptor (H→M, M→H, H→H, M�
 
 Proyecto del reto *Mujeres por la IA Abierta* (SEDIA). Licencia Apache-2.0.
 
-> Estado: `ingest → vad → diarize → asr → align` implementado (VAD y alineación validados en
-> CPU; diarización y ASR pendientes de validar en GPU con `make test-gpu`). `gender` implementado
-> (falta entrenar el clasificador: `make train-gender`). C3/C4 con juez LLM cegado y C2 por
-> embeddings implementados (falta servir el LLM y calibrar τ: `make calibrate-c2`). `make dry-run` recorre todo el pipeline en CPU.
+> **Estado (v1.0.0, entrega 30/10/2026).** Pipeline completo `ingest → … → report`
+> implementado y probado en CPU (`make test`: 115 tests; `make dry-run`). Ruta de la demo
+> (`configs/demo.yaml`): diarización y ASR en GPU, género por metadatos públicos, C1 por reglas
+> y C3/C4 con juez LLM vía **OVHcloud AI Endpoints**. Pendiente de validar con datos reales
+> anotados: C2 (τ sin calibrar → no emite), clasificador acústico de género (sin entrenar) y
+> precisión de C1/C3/C4 frente a un gold set. Ver [Hoja de ruta](#hoja-de-ruta).
+
+## Por qué
+
+En tertulias y debates, quién habla, cuánto, a quién interrumpe y a quién "explica" no se
+reparte por igual. El Explicómetro convierte esa intuición en **métricas reproducibles y
+auditables**: cada número sale de un artefacto intermedio que se puede revisar, cada etiqueta
+del LLM cita el texto que la justifica, y el juez no ve el género de quien habla.
 
 ## Inicio rápido
 
@@ -20,7 +29,20 @@ make test lint
 make app         # visor Streamlit
 ```
 
-En la máquina con GPU (2× V100S):
+En la infraestructura del reto (notebook OVHcloud con GPU + AI Endpoints), paso a paso en
+**[`docs/ovh.md`](docs/ovh.md)**. Resumen:
+
+```bash
+make setup-gpu PYTHON=python3                     # en /workspace/equipo13/explicometro
+cp .env.example .env                              # HF_TOKEN, LLM_BASE_URL, LLM_API_KEY, LLM_MODEL
+make check-llm                                    # lista modelos del endpoint y prueba el juez
+make run EPISODE=ep01 UNTIL=align CONFIG=configs/demo.yaml       # audio en data/raw/ep01.*
+python scripts/speaker_samples.py --episode ep01  # qué dice cada SPK_xx → speakers_ep01.csv
+make run EPISODE=ep01 CONFIG=configs/demo.yaml    # → data/interim/ep01/report.md
+make app
+```
+
+Validación de modelos en una máquina con GPU (2× V100S):
 
 ```bash
 make setup-gpu                      # torch, pyannote.audio 3.1, transformers
@@ -73,17 +95,53 @@ nivel de programa).
 - No se publica audio: solo scripts de descarga (`scripts/download_episodes.py`), hashes
   (`configs/episodes.sha256`), anotaciones y métricas.
 
+## Componentes de terceros y licencias
+
+El proyecto es **Apache-2.0**. Los pesos de los modelos **no** se redistribuyen: se descargan
+de Hugging Face en la primera ejecución. Lista completa (versiones, uso y verificación) en
+[`THIRD_PARTY.md`](THIRD_PARTY.md).
+
+| Componente | Licencia | Uso |
+|---|---|---|
+| Silero VAD (vía faster-whisper) | MIT | detección de voz |
+| pyannote.audio 3.1 · `speaker-diarization-3.1` · `segmentation-3.0` | MIT (modelos con condiciones de acceso en HF) | diarización |
+| `pyannote/wespeaker-voxceleb-resnet34-LM` | CC-BY-4.0 | embeddings de hablante (diarización) |
+| faster-whisper / CTranslate2 · Whisper large-v3-turbo | MIT | ASR por defecto |
+| BSC-LT `whisper-large-v3-LoS-punctuated`, `faster-whisper-bsc-large-v3-cat` | Apache-2.0 | ASR castellano/catalán (alternativos) |
+| SpeechBrain · `spkrec-ecapa-voxceleb` · scikit-learn | Apache-2.0 · BSD-3 | clasificador de género (opcional) |
+| BSC-LT `salamandra-7b-instruct-2606` | Apache-2.0 | juez C3/C4 por defecto (cualquier LLM OpenAI-compatible) |
+| BSC-LT `MrBERT-es` | Apache-2.0 | embeddings para C2 |
+| HiTZ `pyannote-segmentation-3.0-RTVE` | **CC-BY-NC** | segmentación alternativa, **desactivada por defecto** |
+| ffmpeg | GPL (programa externo, no enlazado) | conversión de audio |
+| pydantic, pandas, numpy, pyarrow, openai, streamlit | MIT / BSD / Apache-2.0 | núcleo y visor |
+
+## Hoja de ruta
+
+Detalle y decisiones tomadas (con la alternativa apuntada) en [`ROADMAP.md`](ROADMAP.md).
+
+1. **Validar con datos reales:** anotar 2–3 episodios (gold set), `make eval` para C1 y
+   moderador, `make calibrate-c2` para fijar τ y activar C2, `make ablation` (LLM vs léxico).
+2. **Género sin metadatos:** entrenar el clasificador ECAPA + LR con Common Voice
+   (`make train-gender`) y medir cobertura y error por hablante; ante la duda, `U`.
+3. **Control del cegado del juez:** re-juzgar una muestra con las marcas de género gramatical
+   neutralizadas y comprobar que las tasas por díada no cambian.
+4. **Escala:** corpus de varios programas y cadenas, agregado con IC bootstrap
+   (`make aggregate`) y visor público de resultados agregados (nunca de personas).
+5. **Puesta en producción:** imagen de contenedor, LLM servido con vLLM o AI Endpoints, y
+   ejecución por lotes en GPU.
+
 ## Estructura
 
 ```
 src/explicometro/   schemas.py (contrato) · config.py · io.py · pipeline.py · cli.py · audio.py · chunking.py
                     ingest vad diarize asr align gender turns events metrics llm report
 app/                visor Streamlit
-configs/            default.yaml · episodes.example.yaml
-scripts/            download_episodes · run_pipeline · evaluate · make_fixture · make_tts_fixture
+configs/            default.yaml · demo.yaml (entrega/OVH) · episodes.example.yaml · gender_train.yaml
+scripts/            download_episodes · run_pipeline · check_llm · speaker_samples · evaluate · aggregate
+                    calibrate_c2 · ablation_llm · train_gender · make_fixture · make_tts_fixture
 data/               raw/ interim/ processed/ (ignorados) · annotations/ (versionado)
 tests/              pytest con casos sintéticos
-docs/               arquitectura
+docs/               architecture · metrics · llm · gender · ovh (infraestructura del reto)
 ```
 
 Definiciones operativas de turnos, C1, moderador, tasas, ratios e IC:

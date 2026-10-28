@@ -9,7 +9,8 @@ Entrega: **30/10/2026 08:00**. Prioridad: funciona > validado > bonito.
 - [ ] En la V100S: comparar segmentación 3.1 vs RTVE con `test_gpu_until_align_against_truth`
       (y con un episodio anotado) y fijar el valor por defecto de `use_rtve_segmentation`.
 - [ ] Generar el diálogo de test con StyleTTS2 (`make tts-fixture TTS=styletts2 ...`) para medir WER.
-- [ ] Verificar en Hugging Face las licencias marcadas ⚠️ en `THIRD_PARTY.md`.
+- [x] Verificar en Hugging Face las licencias de los modelos (`THIRD_PARTY.md`, 28/10). Queda Common Voice
+      (solo entrenamiento). HiTZ RTVE es CC-BY-NC: se mantiene desactivada por defecto.
 - [x] `gender`: metadata CSV > ECAPA + LogisticRegression (≥ 30 s de voz limpia, conf ≥ 0,8) > `U`.
 - [ ] Entrenar `models/gender_lr.joblib` en la máquina GPU (`make train-gender`, necesita
       `MDC_API_KEY` y el `dataset_id` de Common Voice catalán en `configs/gender_train.yaml`).
@@ -19,7 +20,8 @@ Entrega: **30/10/2026 08:00**. Prioridad: funciona > validado > bonito.
       solo si mejora la cobertura a umbral 0,8 sin bajar la accuracy por hablante.
 - [x] `llm`: juez cegado C3/C4 (JSON validado, reintento, caché, coste) y modo `lexicon`.
 - [x] `events` C2: MrBERT-es + coseno con los 5 turnos previos de otros + regex de atribución.
-- [ ] Servir el juez (vLLM con una versión que soporte sm_70, u OVH) y ejecutar `make ablation`.
+- [x] Ruta de demo con juez en OVHcloud AI Endpoints (`configs/demo.yaml`, `make check-llm`, `docs/ovh.md`).
+- [ ] Ejecutar `make ablation` (LLM vs léxico) con el gold set.
 - [ ] Calibrar τ de C2 con el gold set (`make calibrate-c2`) y ponerlo en el YAML.
 - [ ] Control del cegado: re-juzgar una muestra neutralizando marcas de género gramatical y
       comprobar que las tasas por díada no cambian.
