@@ -10,7 +10,7 @@ DRY_EP  ?= dryrun_clip_120s
 AUDIO   ?=
 EPISODE ?=
 
-.PHONY: ablation aggregate calibrate-c2 help setup setup-gpu train-gender fixture tts-fixture dry-run run eval app lint format test test-gpu clean
+.PHONY: ablation aggregate calibrate-c2 check-llm help setup setup-gpu train-gender fixture tts-fixture dry-run run eval app lint format test test-gpu clean
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-10s %s\n", $$1, $$2}'
@@ -39,6 +39,9 @@ dry-run: $(FIXTURE)  ## Pipeline completo en CPU con stubs sobre el fixture
 run:  ## Pipeline real: make run EPISODE=id [UNTIL=align] [AUDIO=ruta] (busca data/raw/<id>.*)
 	@test -n "$(EPISODE)$(AUDIO)" || (echo "Uso: make run EPISODE=id [UNTIL=etapa] [AUDIO=ruta]" && exit 2)
 	$(PY) scripts/run_pipeline.py $(if $(EPISODE),--episode $(EPISODE)) $(if $(AUDIO),--audio $(AUDIO)) $(if $(UNTIL),--until $(UNTIL)) --config $(CONFIG)
+
+check-llm:  ## Lista modelos del endpoint LLM (.env) y prueba un juicio
+	$(PY) scripts/check_llm.py --config $(CONFIG)
 
 aggregate:  ## Métricas por corpus/cadena/año con IC bootstrap → data/processed/
 	$(PY) scripts/aggregate.py --config $(CONFIG)
