@@ -13,6 +13,26 @@ Proyecto del reto *Mujeres por la IA Abierta* (SEDIA). Licencia Apache-2.0.
 > anotados: C2 (τ sin calibrar → no emite), clasificador acústico de género (sin entrenar) y
 > precisión de C1/C3/C4 frente a un gold set. Ver [Hoja de ruta](#hoja-de-ruta).
 
+## Resultados reales: sesión de control del Congreso (30/09/2026)
+
+17 preguntas orales (1,67 h) procesadas en el notebook del reto (2 × V100S) con modelos abiertos y
+sin token (configs/open.yaml). Género por el **tratamiento oficial** publicado por el Congreso; la voz
+solo enlaza cada SPK_xx con su persona (51 de 51 hablantes, 0 s en «no consta»).
+
+| Métrica | Mujeres | Hombres |
+|---|---|---|
+| Tiempo de habla, participantes (sin la Presidencia) | 46,9 % | 53,1 % |
+| Tiempo medio por persona y pregunta | 145,0 s (pregunta) · 139,8 s (responde) | 145,3 s · 142,8 s |
+| Modera | Presidencia (17/17) | — |
+
+Interrupciones (C1): 0. El audio oficial solo tiene un micrófono abierto (1 solape de 0,2 s en 168
+cambios de turno), así que este formato no permite medir el trato: exceso y asimetría salen «sin
+datos». Coste medido: ≈ 0,19 € por hora de audio en una V100S. Detalle, método y limitaciones en
+[reports/resultados_congreso_202.md](reports/resultados_congreso_202.md). Reproducir:
+bash run_congreso.sh && bash finish.sh (descarga oficial de static.congreso.es).
+
+Repositorio: https://github.com/ComunidadIA-OS/explicometro
+
 ## Por qué
 
 En tertulias y debates, quién habla, cuánto, a quién interrumpe y a quién "explica" no se
