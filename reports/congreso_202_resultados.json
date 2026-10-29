@@ -1,0 +1,205 @@
+{
+ "corpus": "Congreso, sesión de control 30/09/2026, 17 preguntas",
+ "audio_h": 1.67,
+ "participantes_sin_presidencia": {
+  "tiempo_M_pct": 46.9,
+  "tiempo_H_pct": 53.1,
+  "palabras_M_pct": 45.8,
+  "palabras_H_pct": 54.2,
+  "tiempo_U_s": 0.0
+ },
+ "tiempo_medio_s_por_rol": {
+  "pregunta_H": {
+   "n": 7,
+   "media_s": 145.3
+  },
+  "pregunta_M": {
+   "n": 10,
+   "media_s": 145.0
+  },
+  "responde_H": {
+   "n": 11,
+   "media_s": 142.8
+  },
+  "responde_M": {
+   "n": 6,
+   "media_s": 139.8
+  }
+ },
+ "solapes_ge_0_5s": {
+  "part_part_n": 0,
+  "part_part_s": 0.0,
+  "chair_part_n": 0,
+  "chair_part_s": 0.0
+ },
+ "eventos": [
+  {
+   "episode": "es_congreso_202_q16",
+   "type": "C3_unsolicited_explanation",
+   "src_spk": "SPK_01",
+   "dst_spk": "SPK_02",
+   "t_start": 125.051,
+   "t_end": 225.832,
+   "evidence": "básicamente",
+   "score": 1.0,
+   "overlap_s": null,
+   "recovered": null,
+   "by_moderator": false
+  }
+ ],
+ "enlace_voz": {
+  "coseno_min_asignado": 0.693,
+  "margen_min_frente_a_la_otra_persona": 0.312
+ },
+ "proceso_s_por_etapa": {
+  "ingest": 233.6,
+  "vad": 18.9,
+  "diarize": 202.7,
+  "asr": 140.9,
+  "align": 0.4,
+  "gender": 0.1,
+  "turns": 1.3,
+  "llm": 0.3,
+  "events": 0.4,
+  "metrics": 0.1,
+  "report": 0.1
+ },
+ "por_episodio": [
+  {
+   "episode": "es_congreso_202_q01",
+   "pregunta": "Muñoz de la Iglesia, Ester (M)",
+   "responde": "Cuerpo Caballero, Carlos (H)",
+   "s_pregunta": 158.9,
+   "s_responde": 152.0,
+   "s_presidencia": 38.0
+  },
+  {
+   "episode": "es_congreso_202_q02",
+   "pregunta": "Bendodo Benasayag, Elías (H)",
+   "responde": "Cuerpo Caballero, Carlos (H)",
+   "s_pregunta": 150.1,
+   "s_responde": 137.5,
+   "s_presidencia": 18.3
+  },
+  {
+   "episode": "es_congreso_202_q03",
+   "pregunta": "Marí Bosó, José Vicente (H)",
+   "responde": "Cuerpo Caballero, Carlos (H)",
+   "s_pregunta": 147.8,
+   "s_responde": 148.7,
+   "s_presidencia": 17.3
+  },
+  {
+   "episode": "es_congreso_202_q04",
+   "pregunta": "Figaredo Álvarez-Sala, José María (H)",
+   "responde": "Cuerpo Caballero, Carlos (H)",
+   "s_pregunta": 150.5,
+   "s_responde": 149.5,
+   "s_presidencia": 19.3
+  },
+  {
+   "episode": "es_congreso_202_q05",
+   "pregunta": "Belarra Urteaga, Ione (M)",
+   "responde": "Cuerpo Caballero, Carlos (H)",
+   "s_pregunta": 147.2,
+   "s_responde": 146.7,
+   "s_presidencia": 22.8
+  },
+  {
+   "episode": "es_congreso_202_q06",
+   "pregunta": "Guardiola Salmerón, Mirian (M)",
+   "responde": "Díaz Pérez, Yolanda (M)",
+   "s_pregunta": 143.5,
+   "s_responde": 146.0,
+   "s_presidencia": 31.7
+  },
+  {
+   "episode": "es_congreso_202_q07",
+   "pregunta": "Tellado Filgueira, Miguel (H)",
+   "responde": "Bolaños García, Félix (H)",
+   "s_pregunta": 137.0,
+   "s_responde": 142.0,
+   "s_presidencia": 25.5
+  },
+  {
+   "episode": "es_congreso_202_q08",
+   "pregunta": "Álvarez de Toledo Peralta-Ramos, Cayetana (M)",
+   "responde": "Bolaños García, Félix (H)",
+   "s_pregunta": 138.0,
+   "s_responde": 118.8,
+   "s_presidencia": 18.8
+  },
+  {
+   "episode": "es_congreso_202_q09",
+   "pregunta": "Rodríguez de Millán Parro, María José (M)",
+   "responde": "Bolaños García, Félix (H)",
+   "s_pregunta": 151.1,
+   "s_responde": 143.1,
+   "s_presidencia": 20.4
+  },
+  {
+   "episode": "es_congreso_202_q10",
+   "pregunta": "Carazo Hermoso, Eduardo (H)",
+   "responde": "Rodríguez García, Isabel (M)",
+   "s_pregunta": 146.7,
+   "s_responde": 135.1,
+   "s_presidencia": 48.6
+  },
+  {
+   "episode": "es_congreso_202_q11",
+   "pregunta": "Madrenas i Mir, Marta (M)",
+   "responde": "Rodríguez García, Isabel (M)",
+   "s_pregunta": 147.5,
+   "s_responde": 141.4,
+   "s_presidencia": 23.6
+  },
+  {
+   "episode": "es_congreso_202_q12",
+   "pregunta": "Vaquero Montero, Maribel (M)",
+   "responde": "Rodríguez García, Isabel (M)",
+   "s_pregunta": 146.2,
+   "s_responde": 128.6,
+   "s_presidencia": 11.2
+  },
+  {
+   "episode": "es_congreso_202_q13",
+   "pregunta": "Sémper Pascual, Borja (H)",
+   "responde": "Urtasun Domènech, Ernest (H)",
+   "s_pregunta": 139.3,
+   "s_responde": 142.2,
+   "s_presidencia": 19.5
+  },
+  {
+   "episode": "es_congreso_202_q14",
+   "pregunta": "Rodríguez Calleja, Patricia (M)",
+   "responde": "Redondo García, Ana María del Carmen (M)",
+   "s_pregunta": 150.8,
+   "s_responde": 153.3,
+   "s_presidencia": 26.2
+  },
+  {
+   "episode": "es_congreso_202_q15",
+   "pregunta": "Franco González, Silvia (M)",
+   "responde": "Saiz Delgado, Elma (M)",
+   "s_pregunta": 130.2,
+   "s_responde": 134.2,
+   "s_presidencia": 21.4
+  },
+  {
+   "episode": "es_congreso_202_q16",
+   "pregunta": "Jordà i Roura, Teresa (M)",
+   "responde": "España García, Arcadi (H)",
+   "s_pregunta": 136.8,
+   "s_responde": 147.4,
+   "s_presidencia": 20.1
+  },
+  {
+   "episode": "es_congreso_202_q17",
+   "pregunta": "Matute García de Jalón, Oskar (H)",
+   "responde": "España García, Arcadi (H)",
+   "s_pregunta": 146.0,
+   "s_responde": 142.4,
+   "s_presidencia": 20.8
+  }
+ ]
+}

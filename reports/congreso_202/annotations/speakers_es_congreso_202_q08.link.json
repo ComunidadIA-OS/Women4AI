@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 138.0,
+  "SPK_01": 18.8,
+  "SPK_02": 118.8
+ },
+ "cos": {
+  "SPK_00": {
+   "Álvarez de Toledo Peralta-Ramos, Cayetana": 0.9392258190485385,
+   "Bolaños García, Félix": 0.06149367668651425
+  },
+  "SPK_01": {
+   "Álvarez de Toledo Peralta-Ramos, Cayetana": 0.2225740341712879,
+   "Bolaños García, Félix": -0.08561171243848449
+  },
+  "SPK_02": {
+   "Álvarez de Toledo Peralta-Ramos, Cayetana": 0.19963343329421335,
+   "Bolaños García, Félix": 0.9811409982259209
+  }
+ },
+ "assign": {
+  "SPK_00": "Álvarez de Toledo Peralta-Ramos, Cayetana",
+  "SPK_02": "Bolaños García, Félix"
+ },
+ "chair": "SPK_01",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

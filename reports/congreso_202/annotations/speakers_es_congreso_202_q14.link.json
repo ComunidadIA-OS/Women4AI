@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 26.2,
+  "SPK_01": 150.8,
+  "SPK_02": 153.3
+ },
+ "cos": {
+  "SPK_00": {
+   "Rodríguez Calleja, Patricia": 0.38649789147490166,
+   "Redondo García, Ana María del Carmen": 0.4296449589282907
+  },
+  "SPK_01": {
+   "Rodríguez Calleja, Patricia": 0.7734452407685058,
+   "Redondo García, Ana María del Carmen": 0.08279605629839701
+  },
+  "SPK_02": {
+   "Rodríguez Calleja, Patricia": 0.579409889883026,
+   "Redondo García, Ana María del Carmen": 0.9611762349191146
+  }
+ },
+ "assign": {
+  "SPK_01": "Rodríguez Calleja, Patricia",
+  "SPK_02": "Redondo García, Ana María del Carmen"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

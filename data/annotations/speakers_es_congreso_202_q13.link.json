@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 19.5,
+  "SPK_01": 139.3,
+  "SPK_02": 142.2
+ },
+ "cos": {
+  "SPK_00": {
+   "Sémper Pascual, Borja": 0.08183415379128336,
+   "Urtasun Domènech, Ernest": -0.01572658283873238
+  },
+  "SPK_01": {
+   "Sémper Pascual, Borja": 0.9813141723689107,
+   "Urtasun Domènech, Ernest": 0.3221924043155845
+  },
+  "SPK_02": {
+   "Sémper Pascual, Borja": 0.33199163122170056,
+   "Urtasun Domènech, Ernest": 0.9753618391274335
+  }
+ },
+ "assign": {
+  "SPK_01": "Sémper Pascual, Borja",
+  "SPK_02": "Urtasun Domènech, Ernest"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 1,
+  "senor_presidente": 0
+ }
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.3.0",
+  "episode_id": "es_congreso_202_q07",
+  "dry_run": false,
+  "config_hash": "f6294cc23f6743aa",
+  "duration_s": 361.003,
+  "speech_s": 304.517,
+  "n_speakers": 3,
+  "speakers_by_gender": {
+    "M": 1,
+    "H": 2
+  },
+  "speech_by_gender": {
+    "M": 25.587,
+    "H": 278.93
+  },
+  "words_by_gender": {
+    "M": 91,
+    "H": 780
+  },
+  "presence": {
+    "by_gender": {
+      "H": {
+        "speakers": 0.6666666666666666,
+        "time": 0.9159751343931538,
+        "words": 0.8955223880597015
+      },
+      "M": {
+        "speakers": 0.3333333333333333,
+        "time": 0.08402486560684626,
+        "words": 0.1044776119402985
+      }
+    }
+  },
+  "unknown": {
+    "speakers": 0,
+    "time_s": 0.0,
+    "time_share": 0.0,
+    "words_share": 0.0
+  },
+  "protagonism": {
+    "n_turns": {
+      "M": 6,
+      "H": 6
+    },
+    "mean_turn_s": {
+      "M": 4.264,
+      "H": 46.477
+    },
+    "n_backchannels": {
+      "H": 1
+    },
+    "opener": "SPK_01",
+    "opener_gender": "H",
+    "closer": "SPK_02",
+    "closer_gender": "H",
+    "moderator": "SPK_00",
+    "moderator_gender": "M",
+    "moderator_source": "metadata"
+  },
+  "events": {},
+  "moderator_events": {},
+  "interruption_excess": {
+    "value": null,
+    "ci_low": null,
+    "ci_high": null,
+    "n_events": 0,
+    "n_episodes": 1,
+    "status": "sin_datos"
+  },
+  "asymmetry_ratio": {
+    "value": null,
+    "ci_low": null,
+    "ci_high": null,
+    "n_events": 0,
+    "n_episodes": 1,
+    "status": "sin_datos"
+  }
+}

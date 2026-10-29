@@ -1,0 +1,206 @@
+episodes:
+- id: es_congreso_202_q01
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779575.mp4
+  downloader: http
+  sha256: 7f7a6e68d2a41f15df154e9c17d170067c79eaaac0813efd1e50684ce6648434
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª ESTER MUÑOZ DE LA IGLESIA | Excmo. Sr. Vicepresidente
+    Primero
+- id: es_congreso_202_q02
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779580.mp4
+  downloader: http
+  sha256: 84e7990f27cbdea78118c03a454df56802dba6e720f190f9218f67cb8bd58401
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. ELÍAS BENDODO BENASAYAG
+- id: es_congreso_202_q03
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779585.mp4
+  downloader: http
+  sha256: 9476ec956fb2049cedee4b389a16b87ff0aefcec381130c05f99b949c7919a47
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. JOSÉ VICENTE MARÍ BOSÓ
+- id: es_congreso_202_q04
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779590.mp4
+  downloader: http
+  sha256: 1ffabc2fb3c36383dc1264a361c240231f4e0bdbf26a946fd4bc06a45daeba22
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. JOSÉ MARÍA FIGAREDO ÁLVAREZ-SALA
+- id: es_congreso_202_q05
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779595.mp4
+  downloader: http
+  sha256: 9679e88a0b236bc92deb607d26d859cb072d891343f85cc212fb4f309d0024e3
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª IONE BELARRA URTEAGA
+- id: es_congreso_202_q06
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779600.mp4
+  downloader: http
+  sha256: 850bd078e8d7831c58741dad17eba00fa667dbf952b5fc1b7f71c6bfa63b37c8
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª MIRIAN GUARDIOLA SALMERÓN
+- id: es_congreso_202_q07
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779605.mp4
+  downloader: http
+  sha256: e5eb4c5d06c4ea60e5aeb61eca8909f18377e2a884cbaf5f3480c2b995b6dab4
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. MIGUEL TELLADO FILGUEIRA
+- id: es_congreso_202_q08
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779610.mp4
+  downloader: http
+  sha256: 41da225bcc977dbc73d3cfa9ea637440400e9bbdc5ca23f48d5f7e1d195ac61b
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª CAYETANA ÁLVAREZ DE TOLEDO PERALTA-RAMOS
+- id: es_congreso_202_q09
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779615.mp4
+  downloader: http
+  sha256: fd82978e95166fe2428d7778e6e30c3fb144e8c109c5f7d7f8ae34bcb42f2958
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª MARÍA JOSÉ RODRÍGUEZ DE MILLÁN PARRO
+- id: es_congreso_202_q10
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779620.mp4
+  downloader: http
+  sha256: dc7e01b5257ed65f8429e33f1e9f4457ae4ef479f6de5e2c4a4b6ca1512d8075
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. EDUARDO CARAZO HERMOSO
+- id: es_congreso_202_q11
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779625.mp4
+  downloader: http
+  sha256: aa3690038565667aa3d5a5780d50a1405ef2da2578b4d619f52e750a88a8e2e5
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª MARTA MADRENAS I MIR
+- id: es_congreso_202_q12
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779630.mp4
+  downloader: http
+  sha256: 91d98e96faba4ecf5c63050a39ce1037f5fe1c958d79b649a4ae8a6bae426630
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª MARIBEL VAQUERO MONTERO
+- id: es_congreso_202_q13
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779633.mp4
+  downloader: http
+  sha256: b5c5988dc13261bf7e03ed26076f1f7e8b5c0fe9bfce1a8f19f557915cbb4797
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. BORJA SÉMPER PASCUAL
+- id: es_congreso_202_q14
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779638.mp4
+  downloader: http
+  sha256: 0aa38e6fc1e085f36da8bb00bdf53fb70cef57ab4d4775394de58a725ad1c98a
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª PATRICIA RODRÍGUEZ CALLEJA
+- id: es_congreso_202_q15
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779643.mp4
+  downloader: http
+  sha256: 31fff0227da8fc4ca5f849b21677f7ecbf986ea9e4ebd915adf2ac334780c357
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA formulada por la Diputada Dª SILVIA FRANCO GONZÁLEZ (en sustitución)
+- id: es_congreso_202_q16
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779648.mp4
+  downloader: http
+  sha256: e7ad62e4fa32234d83700fac300f2fe7c4956699bea6bc1db6c629054722cce3
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA de la Diputada Dª TERESA JORDÀ I ROURA
+- id: es_congreso_202_q17
+  url: https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_779653.mp4
+  downloader: http
+  sha256: 7cacfc6a91e89de970b8f5f17cc16e57623d9251a9913cf9fbd0e5f8528d251f
+  source: Congreso de los Diputados (archivo audiovisual, versión original)
+  license: Reutilización permitida citando la fuente y sin alterar el contenido (aviso
+    legal de congreso.es)
+  channel: Congreso
+  program: Pleno - sesión de control
+  date: '2026-09-30'
+  year: 2026
+  title: PREGUNTA del Diputado D. OSKAR MATUTE GARCÍA DE JALÓN

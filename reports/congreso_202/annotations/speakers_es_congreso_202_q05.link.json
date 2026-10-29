@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 22.8,
+  "SPK_01": 147.2,
+  "SPK_02": 146.7
+ },
+ "cos": {
+  "SPK_00": {
+   "Belarra Urteaga, Ione": 0.3201391442099044,
+   "Cuerpo Caballero, Carlos": 0.3232013277504532
+  },
+  "SPK_01": {
+   "Belarra Urteaga, Ione": 0.8889943705442964,
+   "Cuerpo Caballero, Carlos": 0.1234409498229894
+  },
+  "SPK_02": {
+   "Belarra Urteaga, Ione": 0.36346172034519003,
+   "Cuerpo Caballero, Carlos": 0.9459933715087783
+  }
+ },
+ "assign": {
+  "SPK_01": "Belarra Urteaga, Ione",
+  "SPK_02": "Cuerpo Caballero, Carlos"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

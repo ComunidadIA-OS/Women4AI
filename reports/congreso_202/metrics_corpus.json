@@ -1,0 +1,116 @@
+[
+  {
+    "schema_version": "0.3.0",
+    "group_by": [],
+    "group": {},
+    "episodes": [
+      "es_congreso_202_q01",
+      "es_congreso_202_q02",
+      "es_congreso_202_q03",
+      "es_congreso_202_q04",
+      "es_congreso_202_q05",
+      "es_congreso_202_q06",
+      "es_congreso_202_q07",
+      "es_congreso_202_q08",
+      "es_congreso_202_q09",
+      "es_congreso_202_q10",
+      "es_congreso_202_q11",
+      "es_congreso_202_q12",
+      "es_congreso_202_q13",
+      "es_congreso_202_q14",
+      "es_congreso_202_q15",
+      "es_congreso_202_q16",
+      "es_congreso_202_q17"
+    ],
+    "n_episodes": 17,
+    "duration_s": 6029.154,
+    "speakers_by_gender": {
+      "M": 33,
+      "H": 18
+    },
+    "speech_by_gender": {
+      "M": 2693.864,
+      "H": 2588.335
+    },
+    "words_by_gender": {
+      "M": 7577,
+      "H": 7691
+    },
+    "presence": {
+      "by_gender": {
+        "H": {
+          "speakers": 0.35294117647058826,
+          "time": 0.4900108837247517,
+          "words": 0.5037332984018863
+        },
+        "M": {
+          "speakers": 0.6470588235294118,
+          "time": 0.5099891162752482,
+          "words": 0.4962667015981137
+        }
+      }
+    },
+    "unknown": {
+      "speakers": 0,
+      "time_s": 0.0,
+      "time_share": 0.0,
+      "words_share": 0.0
+    },
+    "protagonism": {
+      "n_turns": {
+        "M": 137,
+        "H": 48
+      },
+      "mean_turn_s": {
+        "M": 19.616,
+        "H": 53.904
+      },
+      "n_backchannels": {
+        "H": 6,
+        "M": 14
+      },
+      "openers": {
+        "M": 8,
+        "H": 9
+      },
+      "closers": {
+        "H": 8,
+        "M": 9
+      },
+      "moderators": {
+        "M": 17
+      }
+    },
+    "events": {
+      "C3_unsolicited_explanation": {
+        "M->H": {
+          "count": 1,
+          "receptor_min": 43.139,
+          "rate_per_min": 0.0232
+        }
+      }
+    },
+    "moderator_events": {},
+    "interruption_excess": {
+      "value": null,
+      "ci_low": null,
+      "ci_high": null,
+      "n_events": 0,
+      "n_episodes": 17,
+      "status": "sin_datos"
+    },
+    "asymmetry_ratio": {
+      "value": null,
+      "ci_low": null,
+      "ci_high": null,
+      "n_events": 0,
+      "n_episodes": 17,
+      "status": "sin_datos"
+    },
+    "bootstrap": {
+      "iterations": 1000,
+      "seed": 13,
+      "ci": 0.95
+    }
+  }
+]

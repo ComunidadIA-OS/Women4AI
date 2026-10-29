@@ -1,0 +1,523 @@
+{
+ "source": "Congreso de los Diputados, Sesión Plenaria nº 202 (XV Legislatura), 30/09/2026, sesión de control. Vídeos oficiales de descarga del archivo audiovisual.",
+ "page": "https://app.congreso.es/AudiovisualCongreso/audiovisualdetalledisponible?codOrgano=400&codSesion=202&idLegislaturaElegida=15&fechaSesion=30/09/2026",
+ "url_template": "https://static.congreso.es/audiovisual/video/leg15/400/15_000400_202/cortes/15_000400_202_0_27702_{id}.mp4",
+ "gender_source": "Tratamiento oficial publicado por el Congreso (Diputada Dª / Diputado D., Ministra / Ministro, Vicepresidenta / Vicepresidente).",
+ "blocks": [
+  {
+   "block_id": 779575,
+   "title": "PREGUNTA de la Diputada Dª ESTER MUÑOZ DE LA IGLESIA | Excmo. Sr. Vicepresidente Primero",
+   "interventions": [
+    {
+     "id": 779576,
+     "name": "Muñoz de la Iglesia, Ester",
+     "label": "Muñoz de la Iglesia, Ester (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779577,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    },
+    {
+     "id": 779578,
+     "name": "Muñoz de la Iglesia, Ester",
+     "label": "Muñoz de la Iglesia, Ester (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779579,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q01"
+  },
+  {
+   "block_id": 779580,
+   "title": "PREGUNTA del Diputado D. ELÍAS BENDODO BENASAYAG",
+   "interventions": [
+    {
+     "id": 779581,
+     "name": "Bendodo Benasayag, Elías",
+     "label": "Bendodo Benasayag, Elías (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779582,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    },
+    {
+     "id": 779583,
+     "name": "Bendodo Benasayag, Elías",
+     "label": "Bendodo Benasayag, Elías (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779584,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q02"
+  },
+  {
+   "block_id": 779585,
+   "title": "PREGUNTA del Diputado D. JOSÉ VICENTE MARÍ BOSÓ",
+   "interventions": [
+    {
+     "id": 779586,
+     "name": "Marí Bosó, José Vicente",
+     "label": "Marí Bosó, José Vicente (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779587,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    },
+    {
+     "id": 779588,
+     "name": "Marí Bosó, José Vicente",
+     "label": "Marí Bosó, José Vicente (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779589,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q03"
+  },
+  {
+   "block_id": 779590,
+   "title": "PREGUNTA del Diputado D. JOSÉ MARÍA FIGAREDO ÁLVAREZ-SALA",
+   "interventions": [
+    {
+     "id": 779591,
+     "name": "Figaredo Álvarez-Sala, José María",
+     "label": "Figaredo Álvarez-Sala, José María (GVOX)",
+     "gender": "H"
+    },
+    {
+     "id": 779592,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    },
+    {
+     "id": 779593,
+     "name": "Figaredo Álvarez-Sala, José María",
+     "label": "Figaredo Álvarez-Sala, José María (GVOX)",
+     "gender": "H"
+    },
+    {
+     "id": 779594,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q04"
+  },
+  {
+   "block_id": 779595,
+   "title": "PREGUNTA de la Diputada Dª IONE BELARRA URTEAGA",
+   "interventions": [
+    {
+     "id": 779596,
+     "name": "Belarra Urteaga, Ione",
+     "label": "Belarra Urteaga, Ione (GMx)",
+     "gender": "M"
+    },
+    {
+     "id": 779597,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    },
+    {
+     "id": 779598,
+     "name": "Belarra Urteaga, Ione",
+     "label": "Belarra Urteaga, Ione (GMx)",
+     "gender": "M"
+    },
+    {
+     "id": 779599,
+     "name": "Cuerpo Caballero, Carlos",
+     "label": "Cuerpo Caballero, Carlos (Vicepresidente Primero del Gobierno y Ministro de Economía, Comercio y Empresa)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q05"
+  },
+  {
+   "block_id": 779600,
+   "title": "PREGUNTA de la Diputada Dª MIRIAN GUARDIOLA SALMERÓN",
+   "interventions": [
+    {
+     "id": 779601,
+     "name": "Guardiola Salmerón, Mirian",
+     "label": "Guardiola Salmerón, Mirian (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779602,
+     "name": "Díaz Pérez, Yolanda",
+     "label": "Díaz Pérez, Yolanda (GSUMAR) (Vicepresidenta Segunda y Ministra de Trabajo y Economía Social)",
+     "gender": "M"
+    },
+    {
+     "id": 779603,
+     "name": "Guardiola Salmerón, Mirian",
+     "label": "Guardiola Salmerón, Mirian (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779604,
+     "name": "Díaz Pérez, Yolanda",
+     "label": "Díaz Pérez, Yolanda (GSUMAR) (Vicepresidenta Segunda y Ministra de Trabajo y Economía Social)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q06"
+  },
+  {
+   "block_id": 779605,
+   "title": "PREGUNTA del Diputado D. MIGUEL TELLADO FILGUEIRA",
+   "interventions": [
+    {
+     "id": 779606,
+     "name": "Tellado Filgueira, Miguel",
+     "label": "Tellado Filgueira, Miguel (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779607,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    },
+    {
+     "id": 779608,
+     "name": "Tellado Filgueira, Miguel",
+     "label": "Tellado Filgueira, Miguel (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779609,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q07"
+  },
+  {
+   "block_id": 779610,
+   "title": "PREGUNTA de la Diputada Dª CAYETANA ÁLVAREZ DE TOLEDO PERALTA-RAMOS",
+   "interventions": [
+    {
+     "id": 779611,
+     "name": "Álvarez de Toledo Peralta-Ramos, Cayetana",
+     "label": "Álvarez de Toledo Peralta-Ramos, Cayetana (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779612,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    },
+    {
+     "id": 779613,
+     "name": "Álvarez de Toledo Peralta-Ramos, Cayetana",
+     "label": "Álvarez de Toledo Peralta-Ramos, Cayetana (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779614,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q08"
+  },
+  {
+   "block_id": 779615,
+   "title": "PREGUNTA de la Diputada Dª MARÍA JOSÉ RODRÍGUEZ DE MILLÁN PARRO",
+   "interventions": [
+    {
+     "id": 779616,
+     "name": "Rodríguez de Millán Parro, María José",
+     "label": "Rodríguez de Millán Parro, María José (GVOX)",
+     "gender": "M"
+    },
+    {
+     "id": 779617,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    },
+    {
+     "id": 779618,
+     "name": "Rodríguez de Millán Parro, María José",
+     "label": "Rodríguez de Millán Parro, María José (GVOX)",
+     "gender": "M"
+    },
+    {
+     "id": 779619,
+     "name": "Bolaños García, Félix",
+     "label": "Bolaños García, Félix (GS) (Ministro de la Presidencia, Justicia y Relaciones con las Cortes)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q09"
+  },
+  {
+   "block_id": 779620,
+   "title": "PREGUNTA del Diputado D. EDUARDO CARAZO HERMOSO",
+   "interventions": [
+    {
+     "id": 779621,
+     "name": "Carazo Hermoso, Eduardo",
+     "label": "Carazo Hermoso, Eduardo (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779622,
+     "name": "Rodríguez García, Isabel",
+     "label": "Rodríguez García, Isabel (Ministra de Vivienda y Agenda Urbana)",
+     "gender": "M"
+    },
+    {
+     "id": 779623,
+     "name": "Carazo Hermoso, Eduardo",
+     "label": "Carazo Hermoso, Eduardo (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779624,
+     "name": "Rodríguez García, Isabel",
+     "label": "Rodríguez García, Isabel (Ministra de Vivienda y Agenda Urbana)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q10"
+  },
+  {
+   "block_id": 779625,
+   "title": "PREGUNTA de la Diputada Dª MARTA MADRENAS I MIR",
+   "interventions": [
+    {
+     "id": 779626,
+     "name": "Madrenas i Mir, Marta",
+     "label": "Madrenas i Mir, Marta (GJxCAT)",
+     "gender": "M"
+    },
+    {
+     "id": 779627,
+     "name": "Rodríguez García, Isabel",
+     "label": "Rodríguez García, Isabel (Ministra de Vivienda y Agenda Urbana)",
+     "gender": "M"
+    },
+    {
+     "id": 779628,
+     "name": "Madrenas i Mir, Marta",
+     "label": "Madrenas i Mir, Marta (GJxCAT)",
+     "gender": "M"
+    },
+    {
+     "id": 779629,
+     "name": "Rodríguez García, Isabel",
+     "label": "Rodríguez García, Isabel (Ministra de Vivienda y Agenda Urbana)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q11"
+  },
+  {
+   "block_id": 779630,
+   "title": "PREGUNTA de la Diputada Dª MARIBEL VAQUERO MONTERO",
+   "interventions": [
+    {
+     "id": 779631,
+     "name": "Vaquero Montero, Maribel",
+     "label": "Vaquero Montero, Maribel (GV (EAJ-PNV))",
+     "gender": "M"
+    },
+    {
+     "id": 779632,
+     "name": "Rodríguez García, Isabel",
+     "label": "Rodríguez García, Isabel (Ministra de Vivienda y Agenda Urbana)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q12"
+  },
+  {
+   "block_id": 779633,
+   "title": "PREGUNTA del Diputado D. BORJA SÉMPER PASCUAL",
+   "interventions": [
+    {
+     "id": 779634,
+     "name": "Sémper Pascual, Borja",
+     "label": "Sémper Pascual, Borja (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779635,
+     "name": "Urtasun Domènech, Ernest",
+     "label": "Urtasun Domènech, Ernest (Ministro de Cultura)",
+     "gender": "H"
+    },
+    {
+     "id": 779636,
+     "name": "Sémper Pascual, Borja",
+     "label": "Sémper Pascual, Borja (GP)",
+     "gender": "H"
+    },
+    {
+     "id": 779637,
+     "name": "Urtasun Domènech, Ernest",
+     "label": "Urtasun Domènech, Ernest (Ministro de Cultura)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q13"
+  },
+  {
+   "block_id": 779638,
+   "title": "PREGUNTA de la Diputada Dª PATRICIA RODRÍGUEZ CALLEJA",
+   "interventions": [
+    {
+     "id": 779639,
+     "name": "Rodríguez Calleja, Patricia",
+     "label": "Rodríguez Calleja, Patricia (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779640,
+     "name": "Redondo García, Ana María del Carmen",
+     "label": "Redondo García, Ana María del Carmen (Ministra de Igualdad)",
+     "gender": "M"
+    },
+    {
+     "id": 779641,
+     "name": "Rodríguez Calleja, Patricia",
+     "label": "Rodríguez Calleja, Patricia (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779642,
+     "name": "Redondo García, Ana María del Carmen",
+     "label": "Redondo García, Ana María del Carmen (Ministra de Igualdad)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q14"
+  },
+  {
+   "block_id": 779643,
+   "title": "PREGUNTA formulada por la Diputada Dª SILVIA FRANCO GONZÁLEZ (en sustitución)",
+   "interventions": [
+    {
+     "id": 779644,
+     "name": "Franco González, Silvia",
+     "label": "Franco González, Silvia (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779645,
+     "name": "Saiz Delgado, Elma",
+     "label": "Saiz Delgado, Elma (Ministra de Inclusión, Seguridad Social y Migraciones)",
+     "gender": "M"
+    },
+    {
+     "id": 779646,
+     "name": "Franco González, Silvia",
+     "label": "Franco González, Silvia (GP)",
+     "gender": "M"
+    },
+    {
+     "id": 779647,
+     "name": "Saiz Delgado, Elma",
+     "label": "Saiz Delgado, Elma (Ministra de Inclusión, Seguridad Social y Migraciones)",
+     "gender": "M"
+    }
+   ],
+   "episode": "es_congreso_202_q15"
+  },
+  {
+   "block_id": 779648,
+   "title": "PREGUNTA de la Diputada Dª TERESA JORDÀ I ROURA",
+   "interventions": [
+    {
+     "id": 779649,
+     "name": "Jordà i Roura, Teresa",
+     "label": "Jordà i Roura, Teresa (GR)",
+     "gender": "M"
+    },
+    {
+     "id": 779650,
+     "name": "España García, Arcadi",
+     "label": "España García, Arcadi (Ministro de Hacienda)",
+     "gender": "H"
+    },
+    {
+     "id": 779651,
+     "name": "Jordà i Roura, Teresa",
+     "label": "Jordà i Roura, Teresa (GR)",
+     "gender": "M"
+    },
+    {
+     "id": 779652,
+     "name": "España García, Arcadi",
+     "label": "España García, Arcadi (Ministro de Hacienda)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q16"
+  },
+  {
+   "block_id": 779653,
+   "title": "PREGUNTA del Diputado D. OSKAR MATUTE GARCÍA DE JALÓN",
+   "interventions": [
+    {
+     "id": 779654,
+     "name": "Matute García de Jalón, Oskar",
+     "label": "Matute García de Jalón, Oskar (GEH Bildu)",
+     "gender": "H"
+    },
+    {
+     "id": 779655,
+     "name": "España García, Arcadi",
+     "label": "España García, Arcadi (Ministro de Hacienda)",
+     "gender": "H"
+    },
+    {
+     "id": 779656,
+     "name": "Matute García de Jalón, Oskar",
+     "label": "Matute García de Jalón, Oskar (GEH Bildu)",
+     "gender": "H"
+    },
+    {
+     "id": 779657,
+     "name": "España García, Arcadi",
+     "label": "España García, Arcadi (Ministro de Hacienda)",
+     "gender": "H"
+    }
+   ],
+   "episode": "es_congreso_202_q17"
+  }
+ ]
+}

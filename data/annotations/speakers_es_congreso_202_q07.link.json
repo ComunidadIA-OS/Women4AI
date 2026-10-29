@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 25.5,
+  "SPK_01": 137.0,
+  "SPK_02": 142.0
+ },
+ "cos": {
+  "SPK_00": {
+   "Tellado Filgueira, Miguel": 0.24134706268253683,
+   "Bolaños García, Félix": -0.05600935064181592
+  },
+  "SPK_01": {
+   "Tellado Filgueira, Miguel": 0.9468035579167472,
+   "Bolaños García, Félix": 0.6348350786128412
+  },
+  "SPK_02": {
+   "Tellado Filgueira, Miguel": 0.6166528957948203,
+   "Bolaños García, Félix": 0.976079264965086
+  }
+ },
+ "assign": {
+  "SPK_01": "Tellado Filgueira, Miguel",
+  "SPK_02": "Bolaños García, Félix"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 1,
+  "senor_presidente": 1
+ }
+}

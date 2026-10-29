@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 146.2,
+  "SPK_01": 11.2,
+  "SPK_02": 128.6
+ },
+ "cos": {
+  "SPK_00": {
+   "Vaquero Montero, Maribel": 0.9803105740235329,
+   "Rodríguez García, Isabel": 0.4100959414455566
+  },
+  "SPK_01": {
+   "Vaquero Montero, Maribel": 0.19724989070011759,
+   "Rodríguez García, Isabel": 0.12522305625046315
+  },
+  "SPK_02": {
+   "Vaquero Montero, Maribel": 0.43914425255941786,
+   "Rodríguez García, Isabel": 0.9632281076277277
+  }
+ },
+ "assign": {
+  "SPK_00": "Vaquero Montero, Maribel",
+  "SPK_02": "Rodríguez García, Isabel"
+ },
+ "chair": "SPK_01",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

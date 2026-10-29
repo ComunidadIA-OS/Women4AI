@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 19.3,
+  "SPK_01": 150.5,
+  "SPK_02": 149.5
+ },
+ "cos": {
+  "SPK_00": {
+   "Figaredo Álvarez-Sala, José María": 0.28161323070752536,
+   "Cuerpo Caballero, Carlos": 0.31151168942840135
+  },
+  "SPK_01": {
+   "Figaredo Álvarez-Sala, José María": 0.9221804991862326,
+   "Cuerpo Caballero, Carlos": 0.14530560356579844
+  },
+  "SPK_02": {
+   "Figaredo Álvarez-Sala, José María": 0.2588442424943045,
+   "Cuerpo Caballero, Carlos": 0.9614713356115991
+  }
+ },
+ "assign": {
+  "SPK_01": "Figaredo Álvarez-Sala, José María",
+  "SPK_02": "Cuerpo Caballero, Carlos"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

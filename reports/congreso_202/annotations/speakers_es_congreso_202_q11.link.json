@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 23.6,
+  "SPK_01": 147.5,
+  "SPK_02": 141.4
+ },
+ "cos": {
+  "SPK_00": {
+   "Madrenas i Mir, Marta": 0.42674958369723026,
+   "Rodríguez García, Isabel": 0.4288259452032133
+  },
+  "SPK_01": {
+   "Madrenas i Mir, Marta": 0.9662327792711423,
+   "Rodríguez García, Isabel": 0.1336889018507146
+  },
+  "SPK_02": {
+   "Madrenas i Mir, Marta": 0.0909343273223203,
+   "Rodríguez García, Isabel": 0.8616208498660388
+  }
+ },
+ "assign": {
+  "SPK_01": "Madrenas i Mir, Marta",
+  "SPK_02": "Rodríguez García, Isabel"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 3,
+  "senor_presidente": 0
+ }
+}

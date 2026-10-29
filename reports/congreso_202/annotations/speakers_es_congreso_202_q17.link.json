@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 20.8,
+  "SPK_01": 146.0,
+  "SPK_02": 142.4
+ },
+ "cos": {
+  "SPK_00": {
+   "Matute García de Jalón, Oskar": 0.2259334756420351,
+   "España García, Arcadi": 0.1812266361494321
+  },
+  "SPK_01": {
+   "Matute García de Jalón, Oskar": 0.9906607480119158,
+   "España García, Arcadi": 0.5738404440471818
+  },
+  "SPK_02": {
+   "Matute García de Jalón, Oskar": 0.5836049243959204,
+   "España García, Arcadi": 0.9870418566900939
+  }
+ },
+ "assign": {
+  "SPK_01": "Matute García de Jalón, Oskar",
+  "SPK_02": "España García, Arcadi"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

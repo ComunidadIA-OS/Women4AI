@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 20.4,
+  "SPK_01": 151.1,
+  "SPK_02": 143.1
+ },
+ "cos": {
+  "SPK_00": {
+   "Rodríguez de Millán Parro, María José": 0.4529820022915453,
+   "Bolaños García, Félix": -0.054672897507981835
+  },
+  "SPK_01": {
+   "Rodríguez de Millán Parro, María José": 0.8533739318088291,
+   "Bolaños García, Félix": 0.13995317686421427
+  },
+  "SPK_02": {
+   "Rodríguez de Millán Parro, María José": 0.36128439426510905,
+   "Bolaños García, Félix": 0.9753449944696082
+  }
+ },
+ "assign": {
+  "SPK_01": "Rodríguez de Millán Parro, María José",
+  "SPK_02": "Bolaños García, Félix"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 2,
+  "senor_presidente": 0
+ }
+}

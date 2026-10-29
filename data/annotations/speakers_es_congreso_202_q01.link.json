@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 38.0,
+  "SPK_01": 158.9,
+  "SPK_02": 152.0
+ },
+ "cos": {
+  "SPK_00": {
+   "Muñoz de la Iglesia, Ester": 0.34963925879955005,
+   "Cuerpo Caballero, Carlos": 0.10156291305157622
+  },
+  "SPK_01": {
+   "Muñoz de la Iglesia, Ester": 0.9752608951221569,
+   "Cuerpo Caballero, Carlos": 0.08276851045461692
+  },
+  "SPK_02": {
+   "Muñoz de la Iglesia, Ester": 0.10204480846631195,
+   "Cuerpo Caballero, Carlos": 0.9851601684516282
+  }
+ },
+ "assign": {
+  "SPK_01": "Muñoz de la Iglesia, Ester",
+  "SPK_02": "Cuerpo Caballero, Carlos"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 2,
+  "senor_presidente": 0
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "es_congreso_202_q01": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x2, senor presidente x0"
+ },
+ "es_congreso_202_q02": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x1, senor presidente x0"
+ },
+ "es_congreso_202_q03": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.97) que la Presidencia de es_congreso_202_q02, donde consta el tratamiento"
+ },
+ "es_congreso_202_q04": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.95) que la Presidencia de es_congreso_202_q02, donde consta el tratamiento"
+ },
+ "es_congreso_202_q05": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.94) que la Presidencia de es_congreso_202_q01, donde consta el tratamiento"
+ },
+ "es_congreso_202_q06": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.95) que la Presidencia de es_congreso_202_q10, donde consta el tratamiento"
+ },
+ "es_congreso_202_q07": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.96) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+ },
+ "es_congreso_202_q08": {
+  "chair": "SPK_01",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.96) que la Presidencia de es_congreso_202_q09, donde consta el tratamiento"
+ },
+ "es_congreso_202_q09": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x2, senor presidente x0"
+ },
+ "es_congreso_202_q10": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x4, senor presidente x0"
+ },
+ "es_congreso_202_q11": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x3, senor presidente x0"
+ },
+ "es_congreso_202_q12": {
+  "chair": "SPK_01",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.93) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+ },
+ "es_congreso_202_q13": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x1, senor presidente x0"
+ },
+ "es_congreso_202_q14": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.97) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+ },
+ "es_congreso_202_q15": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.96) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+ },
+ "es_congreso_202_q16": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "tratamiento en el bloque: senora presidenta x1, senor presidente x0"
+ },
+ "es_congreso_202_q17": {
+  "chair": "SPK_00",
+  "genero": "M",
+  "fuente": "misma voz (coseno 0.96) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+ }
+}

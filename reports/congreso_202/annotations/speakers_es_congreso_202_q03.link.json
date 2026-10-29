@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 17.3,
+  "SPK_01": 147.8,
+  "SPK_02": 148.7
+ },
+ "cos": {
+  "SPK_00": {
+   "Marí Bosó, José Vicente": 0.03798943097596269,
+   "Cuerpo Caballero, Carlos": 0.19088029340364793
+  },
+  "SPK_01": {
+   "Marí Bosó, José Vicente": 0.982993219144302,
+   "Cuerpo Caballero, Carlos": 0.16162619769192507
+  },
+  "SPK_02": {
+   "Marí Bosó, José Vicente": 0.17990509394557824,
+   "Cuerpo Caballero, Carlos": 0.9867088324241291
+  }
+ },
+ "assign": {
+  "SPK_01": "Marí Bosó, José Vicente",
+  "SPK_02": "Cuerpo Caballero, Carlos"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

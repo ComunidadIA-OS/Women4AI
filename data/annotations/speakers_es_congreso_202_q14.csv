@@ -1,0 +1,4 @@
+spk_id,nombre_publico,genero_publico,rol,fuente
+SPK_00,Presidencia de la Cámara,M,moderadora,"misma voz (coseno 0.97) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+SPK_01,"Rodríguez Calleja, Patricia",M,invitada,tratamiento oficial del Congreso; voz enlazada a sus intervenciones
+SPK_02,"Redondo García, Ana María del Carmen",M,invitada,tratamiento oficial del Congreso; voz enlazada a sus intervenciones

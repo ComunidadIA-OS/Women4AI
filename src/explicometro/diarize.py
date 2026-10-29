@@ -28,6 +28,8 @@ class DiarizeParams(Params):
     pipeline: str = "pyannote/speaker-diarization-3.1"
     use_rtve_segmentation: bool = False
     rtve_segmentation: str = "HiTZ/pyannote-segmentation-3.0-RTVE"
+    open_embedding: str = "pyannote/wespeaker-voxceleb-resnet34-LM"
+    rtve_checkpoint: str = "seg_CONF.ckpt"  # HiTZ publica 3 checkpoints (CONF, FA, MISS)
     min_speakers: int | None = Field(default=None, ge=1)
     max_speakers: int | None = Field(default=None, ge=1)
     num_speakers: int | None = Field(default=None, ge=1)
@@ -79,6 +81,15 @@ def _speaker_kwargs(p: DiarizeParams) -> dict[str, int]:
     return kw
 
 
+def allow_pyannote_checkpoints() -> None:  # pragma: no cover - requiere torch/pyannote
+    """PyTorch >= 2.6 carga checkpoints con weights_only=True: se autorizan SOLO las clases
+    que guardan los checkpoints de pyannote (no se desactiva la protección)."""
+    import torch
+    from pyannote.audio.core.task import Problem, Resolution, Specifications
+
+    torch.serialization.add_safe_globals([torch.torch_version.TorchVersion, Specifications, Problem, Resolution])
+
+
 def load_pipeline(p: DiarizeParams, rt: RuntimeCfg) -> Any:  # pragma: no cover - requiere GPU/HF
     try:
         import torch
@@ -88,6 +99,32 @@ def load_pipeline(p: DiarizeParams, rt: RuntimeCfg) -> Any:  # pragma: no cover 
         raise BackendError("pyannote necesita los extras de GPU: pip install -e '.[gpu]'") from e
 
     token = env("HF_TOKEN")
+    allow_pyannote_checkpoints()
+    if p.pipeline == "open":
+        # Sin modelos con acceso restringido: segmentacion HiTZ RTVE (CC-BY-NC) + embeddings
+        # WeSpeaker (CC-BY-4.0) con los hiperparametros publicados de speaker-diarization-3.1.
+        from huggingface_hub import hf_hub_download
+
+        seg_path = hf_hub_download(p.rtve_segmentation, p.rtve_checkpoint, token=token)
+        pipe = SpeakerDiarization(
+            segmentation=seg_path,
+            embedding=p.open_embedding,
+            embedding_exclude_overlap=True,
+            clustering="AgglomerativeClustering",
+            segmentation_batch_size=p.segmentation_batch_size,
+            embedding_batch_size=p.embedding_batch_size,
+            use_auth_token=token,
+        )
+        pipe.instantiate(
+            {
+                "segmentation": {"min_duration_off": 0.0},
+                "clustering": {"method": "centroid", "min_cluster_size": 12, "threshold": 0.7045654963945799},
+            }
+        )
+        log.info("diarize: pipeline abierto (%s/%s + %s)", p.rtve_segmentation, p.rtve_checkpoint, p.open_embedding)
+        if rt.device == "cuda":
+            pipe.to(torch.device(f"cuda:{p.device_index}"))
+        return pipe
     base = Pipeline.from_pretrained(p.pipeline, use_auth_token=token)
     if base is None:
         raise BackendError(f"No se pudo cargar {p.pipeline}: acepta sus condiciones en HF y define HF_TOKEN")

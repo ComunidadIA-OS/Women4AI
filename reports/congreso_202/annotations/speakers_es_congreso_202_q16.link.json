@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 20.1,
+  "SPK_01": 136.8,
+  "SPK_02": 147.4
+ },
+ "cos": {
+  "SPK_00": {
+   "Jordà i Roura, Teresa": 0.1430029633299521,
+   "España García, Arcadi": 0.18579721223389245
+  },
+  "SPK_01": {
+   "Jordà i Roura, Teresa": 0.9792743841636848,
+   "España García, Arcadi": 0.20292473333454192
+  },
+  "SPK_02": {
+   "Jordà i Roura, Teresa": 0.1768274066427522,
+   "España García, Arcadi": 0.9909807893104648
+  }
+ },
+ "assign": {
+  "SPK_01": "Jordà i Roura, Teresa",
+  "SPK_02": "España García, Arcadi"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 1,
+  "senor_presidente": 0
+ }
+}

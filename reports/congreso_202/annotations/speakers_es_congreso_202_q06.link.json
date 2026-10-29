@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 31.7,
+  "SPK_01": 143.5,
+  "SPK_02": 146.0
+ },
+ "cos": {
+  "SPK_00": {
+   "Guardiola Salmerón, Mirian": 0.2683292997077991,
+   "Díaz Pérez, Yolanda": 0.5290902470029932
+  },
+  "SPK_01": {
+   "Guardiola Salmerón, Mirian": 0.9858881681619377,
+   "Díaz Pérez, Yolanda": 0.27064448487660786
+  },
+  "SPK_02": {
+   "Guardiola Salmerón, Mirian": 0.14977902541246324,
+   "Díaz Pérez, Yolanda": 0.7479088597696246
+  }
+ },
+ "assign": {
+  "SPK_01": "Guardiola Salmerón, Mirian",
+  "SPK_02": "Díaz Pérez, Yolanda"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}

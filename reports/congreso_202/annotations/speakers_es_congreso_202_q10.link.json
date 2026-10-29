@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 48.6,
+  "SPK_01": 146.7,
+  "SPK_02": 135.1
+ },
+ "cos": {
+  "SPK_00": {
+   "Carazo Hermoso, Eduardo": 0.1380408510310962,
+   "Rodríguez García, Isabel": 0.5252875130288523
+  },
+  "SPK_01": {
+   "Carazo Hermoso, Eduardo": 0.9744348452322281,
+   "Rodríguez García, Isabel": 0.27660347284406345
+  },
+  "SPK_02": {
+   "Carazo Hermoso, Eduardo": 0.04714654160877352,
+   "Rodríguez García, Isabel": 0.6930899003848805
+  }
+ },
+ "assign": {
+  "SPK_01": "Carazo Hermoso, Eduardo",
+  "SPK_02": "Rodríguez García, Isabel"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 4,
+  "senor_presidente": 0
+ }
+}

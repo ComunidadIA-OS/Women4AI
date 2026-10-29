@@ -1,0 +1,4 @@
+spk_id,nombre_publico,genero_publico,rol,fuente
+SPK_00,Presidencia de la Cámara,M,moderadora,"misma voz (coseno 0.96) que la Presidencia de es_congreso_202_q13, donde consta el tratamiento"
+SPK_01,"Tellado Filgueira, Miguel",H,invitado,tratamiento oficial del Congreso; voz enlazada a sus intervenciones
+SPK_02,"Bolaños García, Félix",H,invitado,tratamiento oficial del Congreso; voz enlazada a sus intervenciones

@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 18.3,
+  "SPK_01": 150.1,
+  "SPK_02": 137.5
+ },
+ "cos": {
+  "SPK_00": {
+   "Bendodo Benasayag, Elías": 0.20755733539777654,
+   "Cuerpo Caballero, Carlos": 0.14483647459049898
+  },
+  "SPK_01": {
+   "Bendodo Benasayag, Elías": 0.9781169592114581,
+   "Cuerpo Caballero, Carlos": 0.38311092158787047
+  },
+  "SPK_02": {
+   "Bendodo Benasayag, Elías": 0.41991952426123913,
+   "Cuerpo Caballero, Carlos": 0.9863738829872595
+  }
+ },
+ "assign": {
+  "SPK_01": "Bendodo Benasayag, Elías",
+  "SPK_02": "Cuerpo Caballero, Carlos"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 1,
+  "senor_presidente": 0
+ }
+}

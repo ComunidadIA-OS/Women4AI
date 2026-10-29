@@ -1,0 +1,30 @@
+{
+ "speech_s": {
+  "SPK_00": 21.4,
+  "SPK_01": 130.2,
+  "SPK_02": 134.2
+ },
+ "cos": {
+  "SPK_00": {
+   "Franco González, Silvia": 0.17650538853341236,
+   "Saiz Delgado, Elma": 0.18987655180318597
+  },
+  "SPK_01": {
+   "Franco González, Silvia": 0.954668930446026,
+   "Saiz Delgado, Elma": 0.39226131793102503
+  },
+  "SPK_02": {
+   "Franco González, Silvia": 0.3215263856016958,
+   "Saiz Delgado, Elma": 0.9461586736183438
+  }
+ },
+ "assign": {
+  "SPK_01": "Franco González, Silvia",
+  "SPK_02": "Saiz Delgado, Elma"
+ },
+ "chair": "SPK_00",
+ "chair_address_counts": {
+  "senora_presidenta": 0,
+  "senor_presidente": 0
+ }
+}
