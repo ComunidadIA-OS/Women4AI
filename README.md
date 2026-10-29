@@ -31,7 +31,7 @@ datos». Coste medido: ≈ 0,19 € por hora de audio en una V100S. Detalle, mé
 [reports/resultados_congreso_202.md](reports/resultados_congreso_202.md). Reproducir:
 bash run_congreso.sh && bash finish.sh (descarga oficial de static.congreso.es).
 
-Repositorio: https://github.com/ComunidadIA-OS/explicometro
+Repositorio: https://github.com/ComunidadIA-OS/Women4AI
 
 ## Por qué
 

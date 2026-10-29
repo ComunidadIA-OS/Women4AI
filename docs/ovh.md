@@ -24,7 +24,7 @@ terminal (guía en `/workspace/compartido/LEEME.ipynb`). **Trabaja siempre en
 
 ```bash
 cd /workspace/equipo13
-git clone https://github.com/ComunidadIA-OS/explicometro.git explicometro && cd explicometro
+git clone https://github.com/ComunidadIA-OS/Women4AI.git explicometro && cd explicometro
 nvidia-smi                       # debe verse la GPU
 python3 --version                # ≥ 3.11
 which ffmpeg || sudo apt-get install -y ffmpeg || conda install -y -c conda-forge ffmpeg
