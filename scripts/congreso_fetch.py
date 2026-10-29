@@ -37,7 +37,24 @@ def fetch(url: str, dst: Path) -> Path:
 
 def to_wav(src: Path, dst: Path) -> None:
     if not dst.exists():
-        subprocess.run(["ffmpeg", "-nostdin", "-loglevel", "error", "-y", "-i", str(src), "-vn", "-ac", "1", "-ar", "16000", str(dst)], check=True)
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-nostdin",
+                "-loglevel",
+                "error",
+                "-y",
+                "-i",
+                str(src),
+                "-vn",
+                "-ac",
+                "1",
+                "-ar",
+                "16000",
+                str(dst),
+            ],
+            check=True,
+        )
 
 
 def main() -> None:
@@ -65,20 +82,27 @@ def main() -> None:
         hashes = dict(ex.map(work, jobs))
     eps = []
     for b in man["blocks"]:
-        eps.append({
-            "id": b["episode"],
-            "url": man["url_template"].format(id=b["block_id"]),
-            "downloader": "http",
-            "sha256": hashes[b["block_id"]],
-            "source": "Congreso de los Diputados (archivo audiovisual, versión original)",
-            "license": "Reutilización permitida citando la fuente y sin alterar el contenido (aviso legal de congreso.es)",
-            "channel": "Congreso",
-            "program": "Pleno - sesión de control",
-            "date": "2026-09-30",
-            "year": 2026,
-            "title": b["title"],
-        })
-    Path("configs/episodes.yaml").write_text(yaml.safe_dump({"episodes": eps}, allow_unicode=True, sort_keys=False), encoding="utf-8")
+        eps.append(
+            {
+                "id": b["episode"],
+                "url": man["url_template"].format(id=b["block_id"]),
+                "downloader": "http",
+                "sha256": hashes[b["block_id"]],
+                "source": "Congreso de los Diputados (archivo audiovisual, versión original)",
+                "license": (
+                    "Reutilización permitida citando la fuente y sin alterar el contenido "
+                    "(aviso legal de congreso.es)"
+                ),
+                "channel": "Congreso",
+                "program": "Pleno - sesión de control",
+                "date": "2026-09-30",
+                "year": 2026,
+                "title": b["title"],
+            }
+        )
+    Path("configs/episodes.yaml").write_text(
+        yaml.safe_dump({"episodes": eps}, allow_unicode=True, sort_keys=False), encoding="utf-8"
+    )
     print(f"ok: {len(eps)} episodios, {len(jobs)} ficheros")
 
 

@@ -56,9 +56,8 @@ def clean_spans(segs, spk):
 
 
 def embed(inf, wav, spans):
-    from pyannote.core import Segment
-
     import soundfile as sf
+    from pyannote.core import Segment
 
     dur = sf.info(str(wav)).duration
     vecs, ws = [], []
@@ -121,11 +120,16 @@ def main():
     for s in segs:
         speech[s.speaker] += s.end - s.start
     spk_emb = {spk: embed(inf, wav, clean_spans(segs, spk)) for spk in speech}
-    cos = {spk: ({n: float(v @ r) for n, r in ref.items()} if v is not None else {}) for spk, v in spk_emb.items()}
+    cos = {
+        spk: ({n: float(v @ r) for n, r in ref.items()} if v is not None else {})
+        for spk, v in spk_emb.items()
+    }
 
     assign = {}
     for name in ref:
-        cands = sorted(((c[name], spk) for spk, c in cos.items() if name in c and spk not in assign), reverse=True)
+        cands = sorted(
+            ((c[name], spk) for spk, c in cos.items() if name in c and spk not in assign), reverse=True
+        )
         if cands and cands[0][0] >= MIN_COS:
             assign[cands[0][1]] = name
     for spk, c in cos.items():
@@ -144,9 +148,25 @@ def main():
     rows = []
     for spk in sorted(speech):
         if spk in assign:
-            rows.append((spk, assign[spk], people[assign[spk]]["gender"], "invitada" if people[assign[spk]]["gender"] == "M" else "invitado", "tratamiento oficial del Congreso; voz enlazada a sus intervenciones"))
+            rows.append(
+                (
+                    spk,
+                    assign[spk],
+                    people[assign[spk]]["gender"],
+                    "invitada" if people[assign[spk]]["gender"] == "M" else "invitado",
+                    "tratamiento oficial del Congreso; voz enlazada a sus intervenciones",
+                )
+            )
         elif spk == chair:
-            rows.append((spk, "Presidencia de la Cámara", chair_gender, "moderadora" if chair_gender == "M" else "moderador", f"tratamiento en la sesión: senora presidenta x{n_fem}, senor presidente x{n_mas}"))
+            rows.append(
+                (
+                    spk,
+                    "Presidencia de la Cámara",
+                    chair_gender,
+                    "moderadora" if chair_gender == "M" else "moderador",
+                    f"tratamiento en la sesión: senora presidenta x{n_fem}, senor presidente x{n_mas}",
+                )
+            )
         else:
             rows.append((spk, "", "U", "", "sin enlazar"))
     a.annotations.mkdir(parents=True, exist_ok=True)
@@ -155,7 +175,20 @@ def main():
         w = csv.writer(f)
         w.writerow(["spk_id", "nombre_publico", "genero_publico", "rol", "fuente"])
         w.writerows(rows)
-    (a.annotations / f"speakers_{a.episode}.link.json").write_text(json.dumps({"speech_s": {k: round(v, 1) for k, v in speech.items()}, "cos": cos, "assign": assign, "chair": chair, "chair_address_counts": {"senora_presidenta": n_fem, "senor_presidente": n_mas}}, ensure_ascii=False, indent=1), encoding="utf-8")
+    (a.annotations / f"speakers_{a.episode}.link.json").write_text(
+        json.dumps(
+            {
+                "speech_s": {k: round(v, 1) for k, v in speech.items()},
+                "cos": cos,
+                "assign": assign,
+                "chair": chair,
+                "chair_address_counts": {"senora_presidenta": n_fem, "senor_presidente": n_mas},
+            },
+            ensure_ascii=False,
+            indent=1,
+        ),
+        encoding="utf-8",
+    )
     print(a.episode, rows)
 
 

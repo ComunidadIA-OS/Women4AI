@@ -87,7 +87,9 @@ def allow_pyannote_checkpoints() -> None:  # pragma: no cover - requiere torch/p
     import torch
     from pyannote.audio.core.task import Problem, Resolution, Specifications
 
-    torch.serialization.add_safe_globals([torch.torch_version.TorchVersion, Specifications, Problem, Resolution])
+    torch.serialization.add_safe_globals(
+        [torch.torch_version.TorchVersion, Specifications, Problem, Resolution]
+    )
 
 
 def load_pipeline(p: DiarizeParams, rt: RuntimeCfg) -> Any:  # pragma: no cover - requiere GPU/HF
@@ -121,7 +123,9 @@ def load_pipeline(p: DiarizeParams, rt: RuntimeCfg) -> Any:  # pragma: no cover 
                 "clustering": {"method": "centroid", "min_cluster_size": 12, "threshold": 0.7045654963945799},
             }
         )
-        log.info("diarize: pipeline abierto (%s/%s + %s)", p.rtve_segmentation, p.rtve_checkpoint, p.open_embedding)
+        log.info(
+            "diarize: pipeline abierto (%s/%s + %s)", p.rtve_segmentation, p.rtve_checkpoint, p.open_embedding
+        )
         if rt.device == "cuda":
             pipe.to(torch.device(f"cuda:{p.device_index}"))
         return pipe

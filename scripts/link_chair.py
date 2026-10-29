@@ -16,10 +16,9 @@ import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from link_speakers import clean_spans, embed  # noqa: E402
-
-from explicometro import io as aio  # noqa: E402
-from explicometro.schemas import Word  # noqa: E402
+from explicometro import io as aio
+from explicometro.schemas import Word
+from link_speakers import clean_spans, embed
 
 SAME_VOICE = 0.6
 
@@ -52,15 +51,29 @@ def main():
             continue
         wd = Path("data/interim") / ep
         segs = aio.read_rttm(wd / "diarization.rttm")
-        text = norm(" ".join(w.text for w in sorted(aio.read_models(wd / "transcript.json", Word), key=lambda w: w.start)))
+        text = norm(
+            " ".join(
+                w.text for w in sorted(aio.read_models(wd / "transcript.json", Word), key=lambda w: w.start)
+            )
+        )
         f = len(re.findall(r"senora presidenta", text))
         m = len(re.findall(r"senor presidente(?! del gobierno)", text))
         own = "M" if f > m else "H" if m > f else None
-        info[ep] = {"rows": rows, "chair": chair, "f": f, "m": m, "own": own, "emb": embed(inf, wd / "audio.wav", clean_spans(segs, chair))}
+        info[ep] = {
+            "rows": rows,
+            "chair": chair,
+            "f": f,
+            "m": m,
+            "own": own,
+            "emb": embed(inf, wd / "audio.wav", clean_spans(segs, chair)),
+        }
     refs = [(ep, d) for ep, d in info.items() if d["own"] and d["emb"] is not None]
     out = {}
     for ep, d in info.items():
-        g, src = d["own"], f"tratamiento en el bloque: senora presidenta x{d['f']}, senor presidente x{d['m']}"
+        g, src = (
+            d["own"],
+            f"tratamiento en el bloque: senora presidenta x{d['f']}, senor presidente x{d['m']}",
+        )
         if g is None and d["emb"] is not None and refs:
             sims = sorted(((float(d["emb"] @ r["emb"]), rep, r["own"]) for rep, r in refs), reverse=True)
             # voto de las referencias con la misma voz
@@ -68,7 +81,10 @@ def main():
             gs = {rg for _, _, rg in same}
             if len(gs) == 1:
                 g = gs.pop()
-                src = f"misma voz (coseno {same[0][0]:.2f}) que la Presidencia de {same[0][1]}, donde consta el tratamiento"
+                src = (
+                    f"misma voz (coseno {same[0][0]:.2f}) que la Presidencia de {same[0][1]}, "
+                    "donde consta el tratamiento"
+                )
         g = g or "U"
         for r in d["rows"]:
             if r["spk_id"] == d["chair"]:
@@ -80,7 +96,9 @@ def main():
             w.writeheader()
             w.writerows(d["rows"])
         out[ep] = {"chair": d["chair"], "genero": g, "fuente": src}
-    Path("data/annotations/presidencia_202.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    Path("data/annotations/presidencia_202.json").write_text(
+        json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
     print(json.dumps(out, ensure_ascii=False, indent=1))
 
 
