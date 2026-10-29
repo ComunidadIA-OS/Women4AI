@@ -21,7 +21,7 @@ make setup-gpu    # solo en la máquina con GPU (V100S): añade los modelos
 4. **GPU V100S:** fp16 o int8, nunca bf16 ni flash-attention.
 5. **Privacidad:** hablantes como `SPK_00`; nada de nombres salvo metadatos públicos y
    `privacy.use_public_names: true`. No se sube audio al repo.
-6. **Definiciones de métricas cerradas** (CLAUDE.md). No se cambian sin avisar al equipo.
+6. **Definiciones de métricas cerradas** (docs/metrics.md). No se cambian sin avisar al equipo.
 7. **Licencias:** cada dependencia o modelo nuevo → fila en `THIRD_PARTY.md`.
 
 ## Código

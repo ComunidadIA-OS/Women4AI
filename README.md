@@ -104,7 +104,7 @@ Detalle en [`docs/architecture.md`](docs/architecture.md).
 
 ## Métricas
 
-Definiciones cerradas en [`CLAUDE.md`](CLAUDE.md): A presencia, B protagonismo, C1
+Definiciones cerradas en [`docs/metrics.md`](docs/metrics.md): A presencia, B protagonismo, C1
 interrupción competitiva, C2 reformulación sin atribución, C3 explicación no solicitada,
 C4 corrección directa, exceso de interrupción y ratio de asimetría (IC 95 % por bootstrap a
 nivel de programa).

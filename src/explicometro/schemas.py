@@ -7,7 +7,7 @@ Convenciones:
 - Tiempos en segundos desde el inicio del audio procesado (float >= 0).
 - Hablantes anonimizados: ``SPK_00``, ``SPK_01``... (regex ``^SPK_\\d{2,}$``).
 - Género: ``H`` (hombre), ``M`` (mujer), ``U`` (desconocido). Díadas emisor->receptor
-  con la notación de CLAUDE.md: ``H->M``, ``M->H``, ``H->H``, ``M->M``.
+  con la notación de docs/metrics.md: ``H->M``, ``M->H``, ``H->H``, ``M->M``.
 - Todos los modelos son inmutables y rechazan campos extra (``extra="forbid"``).
 """
 

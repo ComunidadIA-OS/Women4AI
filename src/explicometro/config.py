@@ -68,7 +68,7 @@ class StagesCfg(_Cfg):
 
 
 class InterruptionCfg(_Cfg):
-    """C1 — definición cerrada en CLAUDE.md. Los asentimientos los marca ``turns``."""
+    """C1 — definición cerrada en docs/metrics.md. Los asentimientos los marca ``turns``."""
 
     min_overlap_s: float = 0.5
     yield_within_s: float = 2.0

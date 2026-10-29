@@ -112,7 +112,7 @@ stages:
     params: {}
 
 thresholds:
-  interruption:                  # C1 (definición cerrada, ver CLAUDE.md)
+  interruption:                  # C1 (definición cerrada, ver docs/metrics.md)
     min_overlap_s: 0.5           # B entra con A hablando y se solapan >= 0,5 s...
     yield_within_s: 2.0          # ...y A cede <= 2 s después de que entre B
     recover_within_s: 5.0        # "A recupera": su siguiente turno llega <= 5 s tras acabar B

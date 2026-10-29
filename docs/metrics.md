@@ -1,8 +1,19 @@
 # Turnos, conductas y métricas: definiciones operativas
 
 Todo lo de aquí es configurable en `configs/default.yaml` (`stages.turns.params` y
-`thresholds`). Las métricas de CLAUDE.md son definiciones cerradas: este documento solo
-concreta lo que CLAUDE.md deja abierto.
+`thresholds`). Las métricas de la sección «Definiciones cerradas» no se cambian sin avisar al equipo: el resto
+del documento solo concreta lo que esas definiciones dejan abierto.
+
+## Definiciones cerradas
+
+- A Presencia: % hablantes, % tiempo, % palabras por género.
+- B Protagonismo: nº turnos, duración media, quién abre/cierra (primer/último turno ≥10 s), quién modera.
+- C1 Interrupción competitiva: B empieza con A hablando, solape ≥0,5 s, A cede en ≤2 s. Excluir asentimientos (<1 s o léxico de backchannel). Normalizar por minuto de habla del receptor.
+- C2 Reformulación sin atribución: coseno ≥ umbral (calibrar) entre turno de B y alguno de los 5 turnos previos de A, sin mención explícita a A.
+- C3 Explicación no solicitada y C4 Corrección directa: etiquetas de un LLM abierto con salida JSON validada y justificación citando el texto.
+- Exceso de interrupción = %interrupciones recibidas por mujeres / %tiempo de habla de mujeres.
+- Ratio de asimetría = tasa H→M / tasa H→H, con IC 95 % por bootstrap a nivel de programa.
+
 
 ## Turnos (`turns.py`)
 

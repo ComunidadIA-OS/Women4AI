@@ -1,6 +1,6 @@
 """Eventos C1–C4 y detección de moderador (funciones puras sobre los esquemas).
 
-- **C1 interrupción competitiva** (CLAUDE.md): B empieza mientras A habla, solape >= 0,5 s
+- **C1 interrupción competitiva** (docs/metrics.md): B empieza mientras A habla, solape >= 0,5 s
   y A cede (su turno acaba) <= 2 s después de que entre B. Se excluyen asentimientos
   (``Turn.is_backchannel``) tanto de B como de A. Se guarda el solape y si A recupera el turno.
 - **C2** (reformulación sin atribución): embeddings BSC-LT/MrBERT-es (mean pooling, L2) de
